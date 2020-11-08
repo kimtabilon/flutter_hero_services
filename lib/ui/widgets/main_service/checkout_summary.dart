@@ -8,7 +8,6 @@ import 'package:heroservices/controllers/navigation_controller.dart';
 import 'package:heroservices/models/main_service_model.dart';
 import 'package:heroservices/services/booking_service.dart';
 import 'package:heroservices/ui/views/booking_view.dart';
-import 'package:heroservices/ui/views/service_category_view.dart';
 import 'package:heroservices/ui/widgets/shared/divider_shared_widget.dart';
 import 'package:load/load.dart';
 import 'package:intl/intl.dart';

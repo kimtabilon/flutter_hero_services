@@ -58,6 +58,11 @@ class DefaultFormScheduleWidget extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 20.0,),
+
+                  serviceOption.serviceType=='timeline'
+                  ? GetBuilder<FormController>(builder: (formCtrl) => switchButton(formCtrl))
+                  : SizedBox.shrink(),
+
                   GetBuilder<FormController>(
                     builder: (formCtrl) => TextFormField(
                       decoration: new InputDecoration(
@@ -175,5 +180,31 @@ class DefaultFormScheduleWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget switchButton(formCtrl) {
+    String timelineType = formCtrl.defaultFormValues['Timeline Type'];
+    String label = 'Hour';
+    String type = 'Hours';
+
+    if(timelineType=='Hours') {
+      label = 'Day';
+      type = 'Days';
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text('You can switch to per $label.'),
+        SizedBox(width: 10,),
+        OutlineButton(
+          onPressed: () {
+            formCtrl.addDefaultFieldValue('Timeline Type', type);
+          },
+          child: Text('Switch now'),
+        ),
+      ],
+    );
+
   }
 }

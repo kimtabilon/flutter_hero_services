@@ -20,6 +20,7 @@ class DefaultFormCustomerWidget extends StatelessWidget {
               child: Column(
                 children: [
                   TextFormField(
+                    textCapitalization: TextCapitalization.words,
                     decoration: new InputDecoration(
                       labelText: "Enter Fullname",
                       fillColor: Colors.white,
@@ -40,6 +41,7 @@ class DefaultFormCustomerWidget extends StatelessWidget {
                   ),
                   SizedBox(height: 20.0,),
                   TextFormField(
+                    textCapitalization: TextCapitalization.words,
                     decoration: new InputDecoration(
                       labelText: "Complete Address",
                       fillColor: Colors.white,

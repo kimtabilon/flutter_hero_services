@@ -12,7 +12,7 @@ class NavigationController extends GetxController {
 
   void alert(String label, String message) {
     Get.snackbar(
-      label!=''?label:'Error',
+      label!=''?label:'Somethings went wrong',
       message!=''?message:'Undefined error',
       icon: Icon(Icons.notification_important, color: Colors.white,),
       shouldIconPulse: true,
@@ -20,7 +20,8 @@ class NavigationController extends GetxController {
       backgroundColor: Color(0xff333333),
       colorText: Color(0xffeeeeee),
       isDismissible: true,
-      dismissDirection: SnackDismissDirection.HORIZONTAL
+      dismissDirection: SnackDismissDirection.HORIZONTAL,
+      margin: EdgeInsets.only(bottom: 60, left: 10, right: 10),
     );
   }
 
@@ -32,35 +33,18 @@ class NavigationController extends GetxController {
       bookingGroups[booking.groupId]['total']+= booking.queue!='for_quotation' ? int.parse(booking.total) : 0;
 
       int countBookings = bookingGroups[booking.groupId]['bookings'].length;
-      bookingGroups[booking.groupId]['bookings'][countBookings] = {
-        'bookingId':booking.bookingId,
-        'heroId':booking.heroId,
-        'heroName':booking.heroName,
-        'heroAddress':booking.heroAddress,
-        'heroRate':booking.heroRate,
-        'bookingTotal':booking.total,
-        'queue':booking.queue,
-      };
+      bookingGroups[booking.groupId]['bookings'][countBookings] = booking;
     } else {
       bookingGroups.addAll({
         booking.groupId: {
             'count':1,
             'total': booking.queue!='for_quotation' ? int.parse(booking.total) : 0,
             'bookingId':booking.bookingId,
-            'bookings': { 0 : {
-              'bookingId':booking.bookingId,
-              'heroId':booking.heroId,
-              'heroName':booking.heroName,
-              'heroAddress':booking.heroAddress,
-              'heroRate':booking.heroRate,
-              'bookingTotal':booking.total,
-              'queue':booking.queue,
-            }}
+            'bookings': { 0 : booking}
           }
         }
       );
     }
-    //print('##############: '+bookingGroups.toString());
     update();
   }
 

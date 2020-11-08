@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroservices/controllers/form_controller.dart';
 import 'package:heroservices/controllers/main_service_controller.dart';
+import 'package:heroservices/controllers/navigation_controller.dart';
 import 'package:heroservices/models/main_service_model.dart';
 import 'package:heroservices/services/main_service.dart';
 import 'package:heroservices/ui/views/service_category_view.dart';
@@ -58,13 +59,7 @@ class _ServiceOptionFormViewState extends State<ServiceOptionFormView> {
             });
 
             if(errorMsg!='') {
-              Get.snackbar('Required Fields', errorMsg,
-                icon: Icon(Icons.notification_important, color: Colors.white,),
-                shouldIconPulse: true,
-                snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: Color(0xff333333),
-                colorText: Color(0xffeeeeee),
-              );
+              Get.find<NavigationController>().alert('Required Fields', errorMsg);
             } else {
               //set_default_form
               if(ctrl.currentForm >= ctrl.totalForm-1) {

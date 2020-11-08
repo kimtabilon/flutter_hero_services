@@ -114,7 +114,8 @@ class BookingService {
       String tax,
 
       String queue,
-      ) async {
+  )
+  async {
         await bookingCollection.document().setData({
           'group_id':groupId,
           'service_option_id':serviceOptionId,
@@ -180,7 +181,8 @@ class BookingService {
       String heroAddress,
       String heroRate,
       String total,
-      ) async {
+  )
+  async {
     await bookingCollection
         .document(bookingId)
         .updateData({

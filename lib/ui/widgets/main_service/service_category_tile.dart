@@ -22,12 +22,33 @@ class ServiceCategoryTileWidget extends StatelessWidget {
             }));
       },
       child: Card(
-        child: ListTile(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Icon(IconData(serviceCategory.icon, fontFamily: 'MaterialIcons'), size: 50.0,),
+                  ),
+                  Flexible(child: Text(serviceCategory.name, textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87,),))
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(serviceCategory.description, textAlign: TextAlign.right,),
+              ),
+            ],
+          ),
+        ),
+        /*child: ListTile(
           title: Text(serviceCategory.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),),
           subtitle: Text(serviceCategory.description, ),
           leading: Icon(IconData(serviceCategory.icon, fontFamily: 'MaterialIcons'), size: 50.0,),
 
-        ),
+        ),*/
       ),
     );
   }

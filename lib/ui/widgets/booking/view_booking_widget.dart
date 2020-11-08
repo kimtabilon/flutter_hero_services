@@ -136,12 +136,13 @@ class ViewBookingWidget extends StatelessWidget {
               /*print('-----------------------------------------------');
               print('length####'+_bookings.length.toString());
               print('index####'+index.toString());*/
-              if(_bookings[index]['queue']!='for_quotation') {
+              BookingModel b = _bookings[index];
+              if(b.queue!='for_quotation') {
 
                 return ListTile(
-                  title: Text(_bookings[index]['heroName']),
-                  subtitle: Text(_bookings[index]['heroAddress']),
-                  trailing: Text(_bookings[index]['bookingTotal']+'.00 PHP'),
+                  title: Text(b.heroName),
+                  subtitle: Text(b.heroAddress),
+                  trailing: Text(b.total+'.00 PHP'),
                 );
               }
               //print('##############'+_bookings[index].toString());

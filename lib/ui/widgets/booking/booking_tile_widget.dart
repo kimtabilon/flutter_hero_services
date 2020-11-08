@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:heroservices/controllers/navigation_controller.dart';
 import 'package:heroservices/models/booking_model.dart';
 import 'package:heroservices/services/booking_service.dart';
+import 'package:heroservices/ui/views/chat_view.dart';
 import 'package:heroservices/ui/widgets/booking/view_booking_widget.dart';
 import 'package:heroservices/ui/widgets/shared/rating_widget.dart';
 import 'package:heroservices/ui/widgets/shared/three_bounce_spinkit_shared_widget.dart';
@@ -48,18 +49,16 @@ class BookingTileWidget extends StatelessWidget {
                         Map bookingGroups = Get.find<NavigationController>().bookingGroups;
                         Map _bookings = bookingGroups[booking.groupId]['bookings'];
 
-                        if(_bookings.toString().contains(quote.heroId)) {
-                          for(var h=0; h<_bookings.length; h++) {
-                            if(_bookings[h]['heroId'] == quote.heroId) {
-                              return ListTile(
-                                title: Text(quote.heroName),
-                                subtitle: Text(_bookings[h]['queue'].replaceAll('_', ' ').toUpperCase()),
-                                trailing: Text((booking.total!='0' ? booking.total : quote.rate)+'.00 PHP'),
-                                leading: ovalButton(_bookings[h]['queue'], _bookings[h]['bookingId'], null),
-                              );
-                            }
+                        for(var h=0; h<_bookings.length; h++) {
+                          BookingModel b = _bookings[h];
+                          if(b.heroId == quote.heroId && b.queue!='for_quotation') {
+                            return ListTile(
+                              title: Text(quote.heroName),
+                              subtitle: Text(b.queue.replaceAll('_', ' ').toUpperCase()),
+                              trailing: Text((booking.total!='0' ? booking.total : quote.rate)+'.00 PHP'),
+                              leading: ovalButton(b.queue, b, null),
+                            );
                           }
-
                         }
                         return ListTile(
                           title: Text(quote.heroName),
@@ -81,7 +80,15 @@ class BookingTileWidget extends StatelessWidget {
       default:
         Map bookingGroups = Get.find<NavigationController>().bookingGroups;
         Map _bookings = bookingGroups[booking.groupId]['bookings'];
-        if(bookingGroups[booking.groupId]['bookingId'] == booking.bookingId && !_bookings.toString().contains('for_quotation')) {
+        int groupHasQuote = 0;
+        for(var i=0; i<_bookings.length; i++) {
+          BookingModel bb = _bookings[i];
+          if(bb.queue=='for_quotation') {
+            groupHasQuote++;
+          }
+        }
+
+        if(bookingGroups[booking.groupId]['bookingId'] == booking.bookingId && groupHasQuote==0) {
           if(bookingGroups[booking.groupId]['count']>1) {
             return ExpansionTile(
               title: Text(booking.serviceOption),
@@ -93,11 +100,13 @@ class BookingTileWidget extends StatelessWidget {
                   shrinkWrap: true,
                   itemCount: _bookings.length,
                   itemBuilder: (context, index) {
+                    BookingModel b = _bookings[index];
+
                     return ListTile(
-                      title: Text(_bookings[index]['heroName']),
-                      subtitle: Text(_bookings[index]['queue'].replaceAll('_', ' ').toUpperCase()),
-                      trailing: Text((int.parse(_bookings[index]['heroRate']) * int.parse(booking.timeline)).toString()+'.00 PHP'),
-                      leading: ovalButton(_bookings[index]['queue'], _bookings[index]['bookingId'], null),
+                      title: Text(b.heroName),
+                      subtitle: Text(b.queue.replaceAll('_', ' ').toUpperCase()),
+                      trailing: Text((int.parse(b.heroRate) * int.parse(booking.timeline)).toString()+'.00 PHP'),
+                      leading: ovalButton(b.queue, b, null),
                     );
                   },
                 ),
@@ -122,7 +131,7 @@ class BookingTileWidget extends StatelessWidget {
     }
   }
 
-  Widget ovalButton(String queue, String bookingId, QuoteModel quote) {
+  Widget ovalButton(String queue, BookingModel _booking, QuoteModel quote) {
     switch(queue) {
       case 'for_confirmation':
         return ClipOval(
@@ -132,7 +141,7 @@ class BookingTileWidget extends StatelessWidget {
               splashColor: Color(0xff93CA68), // inkwell color
               child: SizedBox(width: 30, height: 30, child: Icon(Icons.close, color: Colors.white,)),
               onLongPress: () {
-                BookingService().changeQueue(bookingId, 'cancelled');
+                BookingService().changeQueue(_booking.bookingId, 'cancelled');
               },
               onTap: () {
                 Get.find<NavigationController>().alert('Confirm your action', 'Long press to cancel this Hero.');
@@ -152,7 +161,8 @@ class BookingTileWidget extends StatelessWidget {
                 //BookingService().changeQueue(bookingId, 'cancelled');
               },
               onTap: () {
-                Get.find<NavigationController>().alert('Message', 'Chat feature is not yet available.');
+                Get.to(ChatView(booking: _booking,));
+                //Get.find<NavigationController>().alert('Message', 'Chat feature is not yet available.');
               },
             ),
           ),
@@ -269,7 +279,8 @@ class BookingTileWidget extends StatelessWidget {
             children: [
               OutlineButton(
                 onPressed: (){
-                  Get.find<NavigationController>().alert('Message', 'Chat feature is not yet available.');
+                  Get.to(ChatView(booking: _bookingsInGroup[0],));
+                  //Get.find<NavigationController>().alert('Message', 'Chat feature is not yet available.');
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

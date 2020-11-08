@@ -23,12 +23,12 @@ class _BottomNavigationSharedWidgetState extends State<BottomNavigationSharedWid
   @override
   Widget build(BuildContext context) {
     Get.put<NavigationController>(NavigationController());
-    var con = GetConnect();
+    getConnect();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         !isInternetOn
-            ? Container(width:double.infinity, alignment: Alignment.center, color: Colors.red[300], child: Text('You are not Connected to Internet', style: TextStyle(color: Colors.white70),))
+            ? Container(width:double.infinity, padding: EdgeInsets.symmetric(vertical: 4), alignment: Alignment.center, color: Colors.red[300], child: Text('You are not connected to Internet', style: TextStyle(color: Colors.white),))
             : SizedBox.shrink(),
         GetBuilder<NavigationController>(
           builder: (ctrl) => BottomNavigationBar(
@@ -71,7 +71,7 @@ class _BottomNavigationSharedWidgetState extends State<BottomNavigationSharedWid
     );
   }
 
-  void GetConnect() async {
+  void getConnect() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
       setState(() {

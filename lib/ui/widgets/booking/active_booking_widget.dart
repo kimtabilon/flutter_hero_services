@@ -25,7 +25,7 @@ class ActiveBookingWidget extends StatelessWidget {
             if (snapshot.data.length == 0) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Center(child: Text('No record found.')),
+                child: Center(child: Text('No records found.')),
               );
             }
             return ListView.builder(

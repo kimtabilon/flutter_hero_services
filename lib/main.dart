@@ -13,6 +13,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //Get.find<NavigationController>().alert('Message', 'Lorem Ipsum');
     return LoadingProvider(
       themeData: LoadingThemeData(
         loadingBackgroundColor: Colors.transparent,
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         home: ServiceCategoryView(),
-        //home: BookingSummaryTemplate(),
+        //home: ChatView(),
       ),
     );
   }
