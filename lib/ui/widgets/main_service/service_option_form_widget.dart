@@ -58,7 +58,7 @@ class ServiceOptionFormWidget extends StatelessWidget {
               }
           ),
         ),
-        SizedBox(height: 80,),
+        SizedBox(height: 100,),
       ],
     );
   }

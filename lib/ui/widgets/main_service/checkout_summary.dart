@@ -23,6 +23,11 @@ class CheckoutSummary extends StatelessWidget {
     List values = formValues.values.toList(growable: false);
     List keys = formValues.keys.toList(growable: false);
 
+    String _address = defaultFormValues['Customer Street']
+                      +', '+defaultFormValues['Customer Barangay']
+                      +', '+defaultFormValues['Customer City']
+                      +', '+defaultFormValues['Customer Province'];
+
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -96,7 +101,7 @@ class CheckoutSummary extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-                child: Text(defaultFormValues['Customer Address'], style: TextStyle(fontWeight: FontWeight.bold),),
+                child: Text(_address, style: TextStyle(fontWeight: FontWeight.bold),),
               ),
               SizedBox(height: 10,),
               heroList(serviceOption, context),
@@ -140,6 +145,11 @@ class CheckoutSummary extends StatelessWidget {
   }
 
   Widget submitButton(ServiceOptionModel serviceOption, Map<String, String> defaultFormValues, Map<String, String> formValues) {
+    String _address = defaultFormValues['Customer Street']
+        +', '+defaultFormValues['Customer Barangay']
+        +', '+defaultFormValues['Customer City']
+        +', '+defaultFormValues['Customer Province'];
+
     return Center(
       child: MaterialButton(
         shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(22.0) ),
@@ -156,15 +166,17 @@ class CheckoutSummary extends StatelessWidget {
                 groupId, //group_id
                 serviceOption.serviceOptionId,
                 serviceOption.name,
+                serviceOption.multipleBooking,
+                serviceOption.openPrice,
 
                 '', //heroId
-                '', //heroFullname
-                '', //heroCompleteAddress
+                '', //heroName
+                '', //heroAddress
                 '', //heroRate
 
                 Get.find<AuthController>().user.uid,
                 defaultFormValues['Customer Name'],
-                defaultFormValues['Customer Address'],
+                _address,
 
                 defaultFormValues['Schedule'],
                 defaultFormValues['Timeline Type'],
@@ -193,6 +205,8 @@ class CheckoutSummary extends StatelessWidget {
                   groupId, //group_id
                   serviceOption.serviceOptionId,
                   serviceOption.name,
+                  serviceOption.multipleBooking,
+                  serviceOption.openPrice,
 
                   hero.heroId, //heroId
                   hero.heroName, //heroFullname
@@ -201,7 +215,7 @@ class CheckoutSummary extends StatelessWidget {
 
                   Get.find<AuthController>().user.uid,
                   defaultFormValues['Customer Name'],
-                  defaultFormValues['Customer Address'],
+                  _address,
 
                   defaultFormValues['Schedule'],
                   defaultFormValues['Timeline Type'],

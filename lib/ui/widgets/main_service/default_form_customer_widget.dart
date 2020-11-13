@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroservices/controllers/form_controller.dart';
+import 'package:heroservices/ui/widgets/main_service/map_widget.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class DefaultFormCustomerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    InputDecoration decoration = InputDecoration(
+      filled: true,
+      fillColor: Color(0xffffffff),
+      border: new OutlineInputBorder(
+        borderRadius: new BorderRadius.circular(10.0),
+        borderSide: BorderSide(),
+      ),
+    );
+
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -21,51 +32,61 @@ class DefaultFormCustomerWidget extends StatelessWidget {
                 children: [
                   TextFormField(
                     textCapitalization: TextCapitalization.words,
-                    decoration: new InputDecoration(
-                      labelText: "Enter Fullname",
-                      fillColor: Colors.white,
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(
-                        ),
-                      ),
-                      //fillColor: Colors.green
-                    ),
+                    decoration: decoration.copyWith(labelText: 'Enter Fullname'),
                     onChanged: (val) {
                       Get.find<FormController>().addDefaultFieldValue('Customer Name', val);
                     },
                     keyboardType: TextInputType.text,
-                    style: new TextStyle(
-                      fontFamily: "Poppins",
-                    ),
                   ),
-                  SizedBox(height: 20.0,),
-                  TextFormField(
-                    textCapitalization: TextCapitalization.words,
-                    decoration: new InputDecoration(
-                      labelText: "Complete Address",
-                      fillColor: Colors.white,
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(
-                        ),
+                  SizedBox(height: 25.0,),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Complete Address', style: TextStyle(fontSize: 16),),
+                      SizedBox(height: 10,),
+                      TextFormField(
+                        textCapitalization: TextCapitalization.words,
+                        decoration: decoration.copyWith(labelText: 'Street'),
+                        onChanged: (val) {
+                          Get.find<FormController>().addDefaultFieldValue('Customer Street', val);
+                        },
+                        keyboardType: TextInputType.text,
                       ),
-                      //fillColor: Colors.green
-                    ),
-                    onChanged: (val) {
-                      Get.find<FormController>().addDefaultFieldValue('Customer Address', val);
-                    },
-                    keyboardType: TextInputType.text,
-                    maxLines: 4,
-                    maxLength: 1000,
-                    style: new TextStyle(
-                      fontFamily: "Poppins",
-                    ),
+                      SizedBox(height: 10,),
+                      TextFormField(
+                        textCapitalization: TextCapitalization.words,
+                        decoration: decoration.copyWith(labelText: 'Barangay'),
+                        onChanged: (val) {
+                          Get.find<FormController>().addDefaultFieldValue('Customer Barangay', val);
+                        },
+                        keyboardType: TextInputType.text,
+                      ),
+                      SizedBox(height: 10,),
+                      TextFormField(
+                        textCapitalization: TextCapitalization.words,
+                        decoration: decoration.copyWith(labelText: 'City'),
+                        onChanged: (val) {
+                          Get.find<FormController>().addDefaultFieldValue('Customer City', val);
+                        },
+                        keyboardType: TextInputType.text,
+                      ),
+                      SizedBox(height: 10,),
+                      TextFormField(
+                        textCapitalization: TextCapitalization.words,
+                        decoration: decoration.copyWith(labelText: 'Province'),
+                        onChanged: (val) {
+                          Get.find<FormController>().addDefaultFieldValue('Customer Province', val);
+                        },
+                        keyboardType: TextInputType.text,
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
           ),
+          SizedBox(height: 100,),
+          //kIsWeb ? Flexible(child: MapWidget(),):SizedBox.shrink(),
         ],
       ),
     );

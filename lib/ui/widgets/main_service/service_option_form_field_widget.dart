@@ -93,9 +93,8 @@ class ServiceOptionFormFieldWidget extends StatelessWidget {
                   labelText: serviceOptionFormField.label,
                   fillColor: Colors.white,
                   border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(
-                    ),
+                    borderRadius: new BorderRadius.circular(10.0),
+                    borderSide: new BorderSide(),
                   ),
                   //fillColor: Colors.green
                 ),

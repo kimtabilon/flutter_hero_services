@@ -41,13 +41,10 @@ class HeroesSmartTile extends StatelessWidget {
           formCtrl.expandHeroTile(heroService.heroId, _isOpen);
           if(_isOpen) {
             formCtrl.setHeroLoading(heroService.heroId, true);
-            //print(formCtrl.isHeroLoading.toString());
             BookingService(
                 serviceOptionId: heroService.serviceOptionId,
                 heroId: heroService.heroId
-            )
-                .heroBookings
-                .listen((documents) {
+            ).heroBookings.listen((documents) {
               if(documents.length>0) {
                 List bookingSchedules = List();
                 //print('--------------------');
@@ -90,31 +87,35 @@ class HeroesSmartTile extends StatelessWidget {
           SizedBox(height: 10,),
           formCtrl.isHeroLoading[heroService.heroId]
           ? SpinkitSharedWidget(type: 'ThreeBounce',)
-          : Table(
-            border: TableBorder.symmetric(outside: BorderSide(width: 0.4, color: Colors.grey[500])),
-            children: [
-              TableRow(children: [
-                TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text('Address'))),
-                TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(heroService.heroAddress))),
-              ]),
-              TableRow(children: [
-                TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(serviceOption.serviceType.capitalizeFirst + ' Rate'))),
-                TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(rate.toString()+'.00 PHP'))),
-              ]),
-              TableRow(children: [
-                TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text('Experience'))),
-                TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(heroService.heroExperience))),
-              ]),
-              TableRow( children: [
-                TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text('Certification'))),
-                TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(heroService.heroCertification))),
-              ]),
-              TableRow( children: [
-                TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text('Rate for this job'))),
-                TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(heroService.heroRate))),
-              ]),
+          : Container(
+            width: double.infinity,
+            color: Colors.grey[100],
+            child: Table(
+              border: TableBorder.symmetric(outside: BorderSide(width: 0.4, color: Colors.grey[500])),
+              children: [
+                TableRow(children: [
+                  TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text('Address', style: TextStyle(fontSize: 15),))),
+                  TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(heroService.heroAddress))),
+                ]),
+                TableRow(children: [
+                  TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(serviceOption.serviceType.capitalizeFirst + ' Rate', style: TextStyle(fontSize: 15)))),
+                  TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(rate.toString()+'.00 PHP'))),
+                ]),
+                TableRow(children: [
+                  TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text('Experience', style: TextStyle(fontSize: 15)))),
+                  TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(heroService.heroExperience))),
+                ]),
+                TableRow( children: [
+                  TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text('Certification', style: TextStyle(fontSize: 15)))),
+                  TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(heroService.heroCertification))),
+                ]),
+                TableRow( children: [
+                  TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text('Rate for this job', style: TextStyle(fontSize: 15)))),
+                  TableCell(child: Padding(padding: const EdgeInsets.all(8.0), child: Text(heroService.heroRate))),
+                ]),
 
-            ],
+              ],
+            ),
           ),
           SizedBox(height: 10,),
           chooseHeroButton(formCtrl.isHeroAvailable[heroService.heroId], formCtrl.formHeroes),

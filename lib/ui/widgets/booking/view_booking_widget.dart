@@ -120,7 +120,6 @@ class ViewBookingWidget extends StatelessWidget {
   Widget heroesList(BookingModel booking) {
     Map bookingGroups = Get.find<NavigationController>().bookingGroups;
     Map _bookings = bookingGroups[booking.groupId]['bookings'];
-    //print('##############'+_bookings.toString());
     if(_bookings.length>0) {
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -132,10 +131,6 @@ class ViewBookingWidget extends StatelessWidget {
             shrinkWrap: true,
             itemCount: _bookings.length,
             itemBuilder: (context, index) {
-              //print('####'+_bookings[index].toString());
-              /*print('-----------------------------------------------');
-              print('length####'+_bookings.length.toString());
-              print('index####'+index.toString());*/
               BookingModel b = _bookings[index];
               if(b.queue!='for_quotation') {
 
@@ -145,7 +140,6 @@ class ViewBookingWidget extends StatelessWidget {
                   trailing: Text(b.total+'.00 PHP'),
                 );
               }
-              //print('##############'+_bookings[index].toString());
               return SizedBox.shrink();
             },
           ),

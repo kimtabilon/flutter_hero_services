@@ -40,9 +40,11 @@ class _ServiceOptionFormViewState extends State<ServiceOptionFormView> {
 
       ),
       //resizeToAvoidBottomPadding: false,
+      //resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: GetBuilder<FormController>(
         builder: (ctrl) => FloatingActionButton.extended(
+
           label: Text(ctrl.currentForm+1 <= ctrl.totalForm+2 ? 'Next Step ${ctrl.currentForm+1} of ${ctrl.totalForm+2} ':'Done', style: TextStyle(fontSize: 20, color: Colors.white),),
           icon: Icon(Icons.arrow_forward_ios),
           backgroundColor: Color(0xff13869F),
@@ -77,6 +79,15 @@ class _ServiceOptionFormViewState extends State<ServiceOptionFormView> {
 
               //default form, schedule
               if(ctrl.currentForm == ctrl.totalForm) {
+                ctrl.addDefaultFieldValue('Customer Name', '');
+                ctrl.addDefaultFieldValue('Customer Street', '');
+                ctrl.addDefaultFieldValue('Customer Barangay', '');
+                ctrl.addDefaultFieldValue('Customer City', '');
+                ctrl.addDefaultFieldValue('Customer Province', '');
+              }
+
+              //default form, customer information
+              if(ctrl.currentForm == ctrl.totalForm+1) {
                 ctrl.addDefaultFieldValue('Schedule', '');
                 ctrl.addDefaultFieldValue('Hero', '');
                 ctrl.addDefaultFieldValue('Price', '');
@@ -86,12 +97,6 @@ class _ServiceOptionFormViewState extends State<ServiceOptionFormView> {
                 ctrl.addDefaultFieldValue('Hero Rate', '');*/
                 ctrl.addDefaultFieldValue('Total', '0');
                 ctrl.addDefaultFieldValue('Timeline', '');
-              }
-
-              //default form, customer information
-              if(ctrl.currentForm == ctrl.totalForm+1) {
-                ctrl.addDefaultFieldValue('Customer Name', '');
-                ctrl.addDefaultFieldValue('Customer Address', '');
               }
 
               //done, show checkout
@@ -147,8 +152,8 @@ class _ServiceOptionFormViewState extends State<ServiceOptionFormView> {
         controller: defaultPageController,
         physics:new NeverScrollableScrollPhysics(),
         children: [
-          DefaultFormScheduleWidget(),
           DefaultFormCustomerWidget(),
+          DefaultFormScheduleWidget(),
         ],
       ),
     );

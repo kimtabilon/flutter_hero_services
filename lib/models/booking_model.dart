@@ -5,6 +5,8 @@ class BookingModel {
 
   String serviceOptionId;
   String serviceOption;
+  bool multipleBooking;
+  bool openPrice;
 
   String heroId;
   String heroName;
@@ -14,6 +16,8 @@ class BookingModel {
   String customerId;
   String customerName;
   String customerAddress;
+  String customerCity;
+  String customerProvince;
 
   String schedule;
   String timeline;
@@ -35,6 +39,8 @@ class BookingModel {
 
     this.serviceOptionId,
     this.serviceOption,
+    this.multipleBooking,
+    this.openPrice,
 
     this.heroId,
     this.heroName,
@@ -44,6 +50,8 @@ class BookingModel {
     this.customerId,
     this.customerName,
     this.customerAddress,
+    this.customerCity,
+    this.customerProvince,
 
     this.schedule,
     this.timeline,
@@ -61,6 +69,8 @@ class BookingModel {
   BookingModel.fromJson(Map<String, dynamic> parsedJSON)
       : serviceOptionId = parsedJSON['service_option_id'],
         serviceOption = parsedJSON['service_option'],
+        multipleBooking = parsedJSON['multiple_booking'],
+        openPrice = parsedJSON['open_price'],
 
         groupId = parsedJSON['group_id'],
 
@@ -71,7 +81,8 @@ class BookingModel {
         customerId = parsedJSON['customer_id'],
         customerName = parsedJSON['customer_name'],
         customerAddress = parsedJSON['customer_address'],
-
+        customerCity = parsedJSON['customer_city'],
+        customerProvince = parsedJSON['customer_province'],
 
         schedule = parsedJSON['schedule'],
         timeline = parsedJSON['timeline'],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heroservices/models/main_service_model.dart';
 import 'package:heroservices/services/main_service.dart';
 import 'package:heroservices/ui/widgets/main_service/featured_widget.dart';
 import 'package:heroservices/ui/widgets/main_service/service_category_tile.dart';
@@ -40,8 +41,8 @@ class ServiceCategoryView extends StatelessWidget {
                 children: [
                   Text("NEED SOMETHING?"),
                   SizedBox(height: 20,),
-                  Text("Help is", style: TextStyle(fontSize: 40, color: Color(0xff13869F),),),
-                  Text("on the way", style: TextStyle(fontSize: 40, color: Color(0xff13869F),),),
+                  Text("Help is \non the way", style: TextStyle(fontSize: 40, color: Color(0xff13869F),),),
+                  //Text("on the way", style: TextStyle(fontSize: 40, color: Color(0xff13869F),),),
                   SizedBox(height: 20,),
                   Text("OUR HEROES ARE HERE TO SAVE THE DAY"),
                 ],
@@ -70,15 +71,22 @@ class ServiceCategoryView extends StatelessWidget {
                         child: Center(child: Text('No service available.')),
                       );
                     }
-                    return SliverGrid(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1.3,
-                        ),
-                        delegate: SliverChildBuilderDelegate((context, index){
-                          return ServiceCategoryTileWidget(serviceCategory: snapshot.data[index],);
-                        },
-                          childCount: snapshot.hasData ? snapshot.data.length : 0,
+                    return SliverToBoxAdapter(
+                        child: Container(
+                          height: 170,
+                          color: Colors.grey[200],
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snapshot.hasData ? snapshot.data.length : 0,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                height: 170,
+                                width: 200,
+                                child: ServiceCategoryTileWidget(serviceCategory: snapshot.data[index],),
+                              );
+                            },
+                          ),
                         )
                     );
                 }

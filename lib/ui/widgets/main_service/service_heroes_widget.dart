@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:heroservices/controllers/form_controller.dart';
 import 'package:heroservices/controllers/main_service_controller.dart';
 import 'package:heroservices/models/main_service_model.dart';
 import 'package:heroservices/services/main_service.dart';
@@ -10,6 +11,7 @@ class ServiceHeroesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ServiceOptionModel serviceOption = Get.find<MainServiceController>().selectedServiceOption;
+    Map defaultFormValues = Get.find<FormController>().defaultFormValues;
     //print(serviceOption.serviceOptionId);
     return CustomScrollView(
       shrinkWrap: true,
@@ -22,7 +24,11 @@ class ServiceHeroesWidget extends StatelessWidget {
         ),
         StreamBuilder(
             stream: MainService(
-                serviceOptionId: serviceOption.serviceOptionId
+              serviceOptionId: serviceOption.serviceOptionId,
+              filterCity: serviceOption.filterCity,
+              clientCity: defaultFormValues['Customer City'],
+              filterProvince: serviceOption.filterProvince,
+              clientProvince: defaultFormValues['Customer Province'],
             ).serviceHeroes,
             builder: (context, snapshot) {
               if (snapshot.hasError) {

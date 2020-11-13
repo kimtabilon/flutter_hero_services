@@ -47,9 +47,8 @@ class DefaultFormScheduleWidget extends StatelessWidget {
                       labelText: "Schedule",
                       fillColor: Colors.white,
                       border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(
-                        ),
+                        borderRadius: new BorderRadius.circular(10.0),
+                        borderSide: BorderSide(),
                       ),
                       //fillColor: Colors.green
                     ),
@@ -69,24 +68,35 @@ class DefaultFormScheduleWidget extends StatelessWidget {
                         labelText:  "How many "+formCtrl.defaultFormValues['Timeline Type']+"?",
                         fillColor: Colors.white,
                         border: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(25.0),
+                          borderRadius: new BorderRadius.circular(10.0),
                           borderSide: new BorderSide(
                           ),
                         ),
                       ),
-                      onChanged: (timeline) {
+                      onChanged: (input) {
                         //set_days_or_hours
-                        if(timeline.isNotEmpty) {
-                          if(num.tryParse(timeline) != null) {
-                            if(int.parse(timeline) >= serviceOption.minTimeline
-                                && int.parse(timeline) <= serviceOption.maxTimeline ) {
-                              formCtrl.addDefaultFieldValue('Timeline', timeline);
-                            } else {
-                              formCtrl.addDefaultFieldValue('Timeline', '');
+                        if(input.isNotEmpty) {
+                          if(num.tryParse(input) != null) {
+                            if(serviceOption.serviceType=='timeline'
+                                && formCtrl.defaultFormValues['Timeline Type'] == 'Hours'
+                                && int.parse(input) > int.parse(serviceOption.hoursToDay)
+                            ) {
                               Get.find<NavigationController>()
-                                  .alert('Validation',
-                                  'Min:'+serviceOption.minTimeline.toString()+', Max:'+serviceOption.maxTimeline.toString());
+                                  .alert(serviceOption.hoursToDay+' hours limit for this Service.',
+                                  'You can switch Day to get this service. Thanks');
+                            } else {
+                              if(int.parse(input) >= serviceOption.minTimeline
+                                  && int.parse(input) <= serviceOption.maxTimeline
+                              ) {
+                                formCtrl.addDefaultFieldValue('Timeline', input);
+                              } else {
+                                formCtrl.addDefaultFieldValue('Timeline', '');
+                                Get.find<NavigationController>()
+                                    .alert('Validation',
+                                    'Min:'+serviceOption.minTimeline.toString()+', Max:'+serviceOption.maxTimeline.toString());
+                              }
                             }
+
                           } else {
                             Get.find<NavigationController>().alert('Validation', 'Please input a number');
                           }
@@ -121,7 +131,7 @@ class DefaultFormScheduleWidget extends StatelessWidget {
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     content: Container(
-                                        width: double.maxFinite,
+                                        width: double.infinity,
                                         child: ServiceHeroesWidget()
                                     ),
                                   );
@@ -176,7 +186,7 @@ class DefaultFormScheduleWidget extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 80,),
+          SizedBox(height: 100,),
         ],
       ),
     );

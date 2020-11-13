@@ -21,59 +21,69 @@ class BookingTileWidget extends StatelessWidget {
           title: Text(booking.serviceOption),
           subtitle: Text(booking.queue.replaceAll('_', ' ').toUpperCase() + ' • ' + DateFormat('yyyy.MM.dd | HH:mm a').format(DateTime.parse(booking.schedule)).toString()),
           children: [
-            SizedBox(height: 10,),
-            StreamBuilder(
-              stream: BookingService(bookingId: booking.bookingId).bookingQuotes,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(child: Text('Error: ${snapshot.error}')),
-                  );
-                }
-                switch(snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return SpinkitSharedWidget(type: 'ThreeBounce',);
-                  default:
-                    if (snapshot.data.length == 0) {
-                      //hideLoadingDialog();
-                      return Center(child: Text('No response from heroes'));
-                    }
-                    //hideLoadingDialog();
-                    return ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: snapshot.hasData ? snapshot.data.length : 0,
-                      itemBuilder: (context, i) {
-                        QuoteModel quote = snapshot.data[i];
-                        Map bookingGroups = Get.find<NavigationController>().bookingGroups;
-                        Map _bookings = bookingGroups[booking.groupId]['bookings'];
-
-                        for(var h=0; h<_bookings.length; h++) {
-                          BookingModel b = _bookings[h];
-                          if(b.heroId == quote.heroId && b.queue!='for_quotation') {
-                            return ListTile(
-                              title: Text(quote.heroName),
-                              subtitle: Text(b.queue.replaceAll('_', ' ').toUpperCase()),
-                              trailing: Text((booking.total!='0' ? booking.total : quote.rate)+'.00 PHP'),
-                              leading: ovalButton(b.queue, b, null),
-                            );
-                          }
-                        }
-                        return ListTile(
-                          title: Text(quote.heroName),
-                          subtitle: RatingWidget(),
-                          trailing: Text((booking.total!='0' ? booking.total : quote.rate)+'.00 PHP'),
-                          leading: ovalButton('for_quotation', null, quote),
+            Container(
+              width: double.infinity,
+              color: Colors.grey[100],
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 10,),
+                  StreamBuilder(
+                    stream: BookingService(bookingId: booking.bookingId).bookingQuotes,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(child: Text('Error: ${snapshot.error}')),
                         );
-                      },
-                    );
-                }
-              },
+                      }
+                      switch(snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return SpinkitSharedWidget(type: 'ThreeBounce',);
+                        default:
+                          if (snapshot.data.length == 0) {
+                            //hideLoadingDialog();
+                            return Center(child: Text('No response from heroes'));
+                          }
+                          //hideLoadingDialog();
+                          return ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: snapshot.hasData ? snapshot.data.length : 0,
+                            itemBuilder: (context, i) {
+                              QuoteModel quote = snapshot.data[i];
+                              Map bookingGroups = Get.find<NavigationController>().bookingGroups;
+                              Map _bookings = bookingGroups[booking.groupId]['bookings'];
+
+                              for(var h=0; h<_bookings.length; h++) {
+                                BookingModel b = _bookings[h];
+                                if(b.heroId == quote.heroId && b.queue!='for_quotation') {
+                                  return ListTile(
+                                    title: Text(quote.heroName),
+                                    subtitle: Text(b.queue.replaceAll('_', ' ').toUpperCase()),
+                                    trailing: Text((booking.openPrice ? quote.rate : booking.total)+'.00 PHP'),
+                                    leading: ovalButton(b.queue, b, null),
+                                  );
+                                }
+                              }
+                              return ListTile(
+                                title: Text(quote.heroName),
+                                subtitle: RatingWidget(),
+                                trailing: Text((booking.openPrice ? quote.rate : booking.total)+'.00 PHP'),
+                                leading: ovalButton('for_quotation', null, quote),
+                              );
+                            },
+                          );
+                      }
+                    },
+                  ),
+                  SizedBox(height: 20,),
+                  actionButtons(context),
+                  SizedBox(height: 20,),
+                ],
+              ),
             ),
-            SizedBox(height: 20,),
-            actionButtons(context),
-            SizedBox(height: 20,),
+
           ],
         );
         break;
@@ -87,7 +97,6 @@ class BookingTileWidget extends StatelessWidget {
             groupHasQuote++;
           }
         }
-
         if(bookingGroups[booking.groupId]['bookingId'] == booking.bookingId && groupHasQuote==0) {
           if(bookingGroups[booking.groupId]['count']>1) {
             return ExpansionTile(
@@ -95,23 +104,41 @@ class BookingTileWidget extends StatelessWidget {
               subtitle: Text(DateFormat('yyyy.MM.dd | HH:mm a').format(DateTime.parse(booking.schedule)).toString()),
               trailing: Text(bookingGroups[booking.groupId]['total'].toString()+'.00 PHP'),
               children: [
-                ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _bookings.length,
-                  itemBuilder: (context, index) {
-                    BookingModel b = _bookings[index];
-
-                    return ListTile(
-                      title: Text(b.heroName),
-                      subtitle: Text(b.queue.replaceAll('_', ' ').toUpperCase()),
-                      trailing: Text((int.parse(b.heroRate) * int.parse(booking.timeline)).toString()+'.00 PHP'),
-                      leading: ovalButton(b.queue, b, null),
-                    );
-                  },
+                Container(
+                  width: double.infinity,
+                  color: Colors.grey[100],
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [],
+                  ),
                 ),
-                actionButtons(context),
-                SizedBox(height: 20,),
+
+                Container(
+                  width: double.infinity,
+                  color: Colors.grey[100],
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _bookings.length,
+                        itemBuilder: (context, index) {
+                          BookingModel b = _bookings[index];
+
+                          return ListTile(
+                            title: Text(b.heroName),
+                            subtitle: Text(b.queue.replaceAll('_', ' ').toUpperCase()),
+                            trailing: Text((int.parse(b.heroRate) * int.parse(booking.timeline)).toString()+'.00 PHP'),
+                            leading: ovalButton(b.queue, b, null),
+                          );
+                        },
+                      ),
+                      actionButtons(context),
+                      SizedBox(height: 20,),
+                    ],
+                  ),
+                ),
               ],
             );
           }
@@ -120,9 +147,18 @@ class BookingTileWidget extends StatelessWidget {
             subtitle: Text(booking.queue.replaceAll('_', ' ').toUpperCase() + ' • ' + DateFormat('yyyy.MM.dd | HH:mm a').format(DateTime.parse(booking.schedule)).toString()),
             trailing: Text(booking.total+'.00 PHP'),
             children: [
-              SizedBox(height: 20,),
-              actionButtons(context),
-              SizedBox(height: 20,),
+              Container(
+                width: double.infinity,
+                color: Colors.grey[100],
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 20,),
+                    actionButtons(context),
+                    SizedBox(height: 20,),
+                  ],
+                ),
+              ),
             ],
           );
         }
@@ -176,29 +212,42 @@ class BookingTileWidget extends StatelessWidget {
               splashColor: Color(0xff93CA68), // inkwell color
               child: SizedBox(width: 30, height: 30, child: Icon(Icons.add, color: Colors.white,)),
               onLongPress: () {
-                BookingService().bookService(
-                    booking.groupId,
-                    booking.serviceOptionId,
-                    booking.serviceOption,
+                if(booking.multipleBooking) {
+                  BookingService().bookService(
+                      booking.groupId,
+                      booking.serviceOptionId,
+                      booking.serviceOption,
+                      booking.multipleBooking,
+                      booking.openPrice,
 
-                    quote.heroId,
-                    quote.heroName,
-                    quote.heroAddress,
-                    quote.rate,
+                      quote.heroId,
+                      quote.heroName,
+                      quote.heroAddress,
+                      quote.rate,
 
-                    booking.customerId,
-                    booking.customerName,
-                    booking.customerAddress,
-                    booking.schedule,
-                    booking.timelineType,
-                    booking.timeline,
-                    booking.formValues,
-                    booking.promoCode,
-                    booking.promoAmount,
-                    booking.total!='0' ? booking.total : quote.rate,
-                    booking.tax,
-                    'for_confirmation'
-                );
+                      booking.customerId,
+                      booking.customerName,
+                      booking.customerAddress,
+                      booking.schedule,
+                      booking.timelineType,
+                      booking.timeline,
+                      booking.formValues,
+                      booking.promoCode,
+                      booking.promoAmount,
+                      booking.openPrice ? quote.rate : booking.total,
+                      booking.tax,
+                      'for_confirmation'
+                  );
+                } else {
+                  BookingService().addHero(
+                      booking.bookingId,
+                      quote.heroId,
+                      quote.heroName,
+                      quote.heroAddress,
+                      quote.rate,
+                      booking.openPrice ? quote.rate : booking.total,
+                  );
+                }
               },
               onTap: () {
                 Get.find<NavigationController>().alert('Confirm your action', 'Long press to select a quote.');

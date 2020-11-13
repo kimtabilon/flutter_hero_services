@@ -23,6 +23,8 @@ class BookingService {
 
         serviceOptionId: doc.data['service_option_id'] ?? '',
         serviceOption: doc.data['service_option'] ?? '',
+        multipleBooking: doc.data['multiple_booking'] ?? false,
+        openPrice: doc.data['open_price'] ?? true,
 
         heroId: doc.data['hero_id'] ?? '',
         heroName: doc.data['hero_name'] ?? '',
@@ -93,6 +95,8 @@ class BookingService {
       String groupId,
       String serviceOptionId,
       String serviceOption,
+      bool multipleBooking,
+      bool openBooking,
 
       String heroId,
       String heroName,
@@ -120,6 +124,8 @@ class BookingService {
           'group_id':groupId,
           'service_option_id':serviceOptionId,
           'service_option':serviceOption,
+          'multiple_booking':multipleBooking,
+          'open_booking':openBooking,
 
           'hero_id':heroId,
           'hero_name':heroName,

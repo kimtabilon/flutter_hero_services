@@ -5,6 +5,7 @@ import 'package:heroservices/controllers/auth_controller.dart';
 import 'package:heroservices/controllers/navigation_controller.dart';
 import 'package:heroservices/ui/views/account_view.dart';
 import 'package:heroservices/ui/views/booking_view.dart';
+import 'package:heroservices/ui/widgets/main_service/map_widget.dart';
 import 'package:heroservices/ui/views/service_category_view.dart';
 
 class BottomNavigationSharedWidget extends StatefulWidget {
@@ -41,7 +42,6 @@ class _BottomNavigationSharedWidgetState extends State<BottomNavigationSharedWid
                   Get.offAll(BookingView());
                   break;
                 case 2:
-                  Get.put<AuthController>(AuthController());
                   Get.offAll(AccountView());
                   break;
                 default:
@@ -62,7 +62,7 @@ class _BottomNavigationSharedWidgetState extends State<BottomNavigationSharedWid
               BottomNavigationBarItem(
                   icon: Icon(Icons.face),
                   label: "ACCOUNT"
-              )
+              ),
             ],
           )
           ,

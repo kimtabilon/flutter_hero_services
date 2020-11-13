@@ -9,11 +9,22 @@ class MainService {
   final String serviceOptionId;
   final String serviceOptionFormId;
 
-  MainService(
-      {this.serviceCategoryId,
-      this.serviceOptionId,
-      this.serviceId,
-      this.serviceOptionFormId});
+  final bool filterCity;
+  final String clientCity;
+  final bool filterProvince;
+  final String clientProvince;
+
+  MainService({
+    this.serviceCategoryId,
+    this.serviceOptionId,
+    this.serviceId,
+    this.serviceOptionFormId,
+
+    this.filterCity,
+    this.clientCity,
+    this.filterProvince,
+    this.clientProvince,
+  });
 
   /*
    * SERVICES
@@ -91,6 +102,8 @@ class MainService {
 
         multipleBooking: doc.data['multiple_booking'] ?? false,
         openPrice: doc.data['open_price'] ?? false,
+        filterCity: doc.data['filter_city'] ?? false,
+        filterProvince: doc.data['filter_province'] ?? false,
         minTimeline: doc.data['min_timeline'] ?? 1,
         maxTimeline: doc.data['max_timeline'] ?? 8,
       );
@@ -140,21 +153,30 @@ class MainService {
 
         heroName: doc.data['hero_name'] ?? '',
         heroAddress: doc.data['hero_address'] ?? '',
+        heroCity: doc.data['hero_city'] ?? '',
+        heroProvince: doc.data['hero_province'] ?? '',
         heroPhoto: doc.data['hero_photo'] ?? '',
         heroCertification: doc.data['hero_certification'] ?? '',
         heroRate: doc.data['hero_rate'] ?? '',
         heroExperience: doc.data['hero_experience'] ?? '',
-
-
       );
     }).toList();
   }
 
   Stream<List<HeroServiceModel>> get serviceHeroes {
-    return serviceOptionHeroesCollection
+    var heroes = serviceOptionHeroesCollection
         .where('service_option_id', isEqualTo: serviceOptionId)
-        .where('status', isEqualTo: 'active')
-        .snapshots()
+        .where('status', isEqualTo: 'active');
+
+    if(filterCity) {
+      heroes.where('hero_city', isEqualTo: clientCity);
+    }
+
+    if(filterProvince) {
+      heroes.where('hero_province', isEqualTo: clientProvince);
+    }
+
+    return heroes.snapshots()
         .map(_serviceOptionHeroesListFromSnapshot);
   }
 

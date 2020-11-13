@@ -22,6 +22,8 @@ class ServiceCategoryTileWidget extends StatelessWidget {
             }));
       },
       child: Card(
+        elevation: 2,
+        borderOnForeground: true,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -31,14 +33,14 @@ class ServiceCategoryTileWidget extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Icon(IconData(serviceCategory.icon, fontFamily: 'MaterialIcons'), size: 50.0,),
+                    child: Icon(IconData(serviceCategory.icon, fontFamily: 'MaterialIcons',), color: Colors.grey[600], size: 50.0,),
                   ),
-                  Flexible(child: Text(serviceCategory.name, textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87,),))
+                  Flexible(child: Text(serviceCategory.name, textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[800],),))
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text(serviceCategory.description, textAlign: TextAlign.right,),
+                child: Text(serviceCategory.description, textAlign: TextAlign.right, style: TextStyle(fontStyle: FontStyle.italic)),
               ),
             ],
           ),

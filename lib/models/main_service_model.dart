@@ -44,6 +44,8 @@ class ServiceOptionModel {
 
   final bool multipleBooking; //bool
   final bool openPrice; //bool
+  final bool filterCity; //bool
+  final bool filterProvince; //bool
   final int minTimeline;
   final int maxTimeline;
 
@@ -62,6 +64,8 @@ class ServiceOptionModel {
 
     this.multipleBooking,
     this.openPrice,
+    this.filterCity,
+    this.filterProvince,
     this.minTimeline,
     this.maxTimeline,
 
@@ -122,6 +126,8 @@ class HeroServiceModel {
 
   final String heroName;
   final String heroAddress;
+  final String heroCity;
+  final String heroProvince;
   final String heroPhoto;
   final String heroCertification;
   final String heroRate;
@@ -139,6 +145,8 @@ class HeroServiceModel {
 
     this.heroName,
     this.heroAddress,
+    this.heroCity,
+    this.heroProvince,
     this.heroPhoto,
     this.heroCertification,
     this.heroRate,

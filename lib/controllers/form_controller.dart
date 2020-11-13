@@ -104,7 +104,15 @@ class FormController extends GetxController {
     isHeroExpanded={};
     isHeroAvailable={};
 
-    requiredValues={'Schedule':'required','Timeline':'required','Customer Name':'required','Customer Address':'required',};
+    requiredValues = {
+      'Schedule':'required',
+      'Timeline':'required',
+      'Customer Name':'required',
+      'Customer Street':'required',
+      'Customer Barangay':'required',
+      'Customer City':'required',
+      'Customer Province':'required',
+    };
 
     formHeroes = [];
 

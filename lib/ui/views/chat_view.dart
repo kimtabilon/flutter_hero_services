@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:heroservices/models/booking_model.dart';
 import 'package:heroservices/models/chat_model.dart';
 import 'package:heroservices/services/chat_service.dart';
@@ -24,13 +25,15 @@ class ChatView extends StatelessWidget {
               TextSpan(
                   text: booking.heroName,
                   style: TextStyle(
+                    color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                   )),
               TextSpan(text: '\n'),
               TextSpan(
-                text: booking.serviceOption+' • 2020.01.23 | 8:00am',
+                text: booking.serviceOption+' • '+DateFormat('yyyy.MM.dd | HH:mm a').format(DateTime.parse(booking.schedule)).toString(),
                 style: TextStyle(
+                  color: Colors.white,
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
                 ),
@@ -122,7 +125,7 @@ class ChatView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
+                    color: Colors.grey[200],
                     spreadRadius: 2,
                     blurRadius: 5,
                   ),
@@ -151,11 +154,16 @@ class ChatView extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: TextField(
+            child: TextFormField(
               controller: messageCtrl,
               maxLines: null,
-              decoration: InputDecoration.collapsed(
+              decoration: InputDecoration(
                 hintText: 'Send a message..',
+                fillColor: Colors.white,
+                border: new OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(20.0),
+                  borderSide: new BorderSide(),
+                ),
               ),
               textCapitalization: TextCapitalization.sentences,
             ),
@@ -163,7 +171,7 @@ class ChatView extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.send),
             iconSize: 25,
-            color: Theme.of(context).primaryColor,
+            color: Colors.blue,
             onPressed: () {
               ChatService().sendChat(
                   booking.heroId,
