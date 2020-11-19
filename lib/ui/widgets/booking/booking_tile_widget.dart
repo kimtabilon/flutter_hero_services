@@ -11,7 +11,7 @@ import 'package:heroservices/ui/widgets/shared/rating_widget.dart';
 import 'package:heroservices/ui/widgets/shared/three_bounce_spinkit_shared_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:popup_menu/popup_menu.dart';
-import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/url_launcher.dart';
 
 class BookingTileWidget extends StatelessWidget {
   final BookingModel booking;
@@ -260,7 +260,7 @@ class BookingTileWidget extends StatelessWidget {
                   );
                   break;
                 case 'Call':
-                  launch(('tel://${_booking.heroNumber}'));
+                  //launch(('tel://${_booking.heroNumber}'));
                   break;
               }
               print('Click menu -> ${item.menuTitle}');
