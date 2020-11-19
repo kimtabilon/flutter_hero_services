@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:heroservices/models/main_service_model.dart';
 import 'package:heroservices/services/main_service.dart';
 import 'package:heroservices/ui/widgets/main_service/featured_widget.dart';
 import 'package:heroservices/ui/widgets/main_service/service_category_tile.dart';

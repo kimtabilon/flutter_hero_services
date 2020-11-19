@@ -1,11 +1,9 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:heroservices/controllers/auth_controller.dart';
 import 'package:heroservices/controllers/navigation_controller.dart';
 import 'package:heroservices/ui/views/account_view.dart';
 import 'package:heroservices/ui/views/booking_view.dart';
-import 'package:heroservices/ui/widgets/main_service/map_widget.dart';
 import 'package:heroservices/ui/views/service_category_view.dart';
 
 class BottomNavigationSharedWidget extends StatefulWidget {

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroservices/controllers/form_controller.dart';
-import 'package:heroservices/ui/widgets/main_service/map_widget.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+//import 'package:flutter/foundation.dart' show kIsWeb;
 
 class DefaultFormCustomerWidget extends StatelessWidget {
 
