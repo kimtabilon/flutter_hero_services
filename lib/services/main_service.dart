@@ -49,6 +49,7 @@ class MainService {
     return serviceCollection
         .where('service_category_id', isEqualTo: serviceCategoryId)
         .where('enable', isEqualTo: true)
+        .orderBy('name')
         .snapshots()
         .map(_serviceListFromSnapshot);
   }
@@ -75,6 +76,7 @@ class MainService {
   Stream<List<ServiceCategoryModel>> get serviceCategories {
     return serviceCategoryCollection
         .where('enable', isEqualTo: true)
+        .orderBy('name')
         .snapshots()
         .map(_serviceCategoryListFromSnapshot);
   }
@@ -97,6 +99,7 @@ class MainService {
 
         name: doc.data['name'] ?? '',
         description: doc.data['description'] ?? '',
+        inclusions: doc.data['inclusions'] ?? '',
         enable: doc.data['enable'] ?? false,
         icon: doc.data['icon'] ?? 58790,
 
@@ -114,6 +117,7 @@ class MainService {
     return serviceOptionCollection
         .where('service_id', isEqualTo: serviceId)
         .where('enable', isEqualTo: true)
+        .orderBy('name')
         .snapshots()
         .map(_serviceOptionListFromSnapshot);
   }
@@ -125,6 +129,7 @@ class MainService {
     return serviceOptionCollection
         .where('enable', isEqualTo: true)
         .where('featured', isEqualTo: true)
+        .orderBy('name')
         .snapshots()
         .map(_serviceOptionListFromSnapshot);
   }
@@ -164,16 +169,18 @@ class MainService {
   }
 
   Stream<List<HeroServiceModel>> get serviceHeroes {
-    var heroes = serviceOptionHeroesCollection
+    Query heroes = serviceOptionHeroesCollection
         .where('service_option_id', isEqualTo: serviceOptionId)
         .where('status', isEqualTo: 'active');
 
     if(filterCity) {
-      heroes.where('hero_city', isEqualTo: clientCity);
+      print('filterCity : '+clientCity);
+      heroes = heroes.where('hero_city', isEqualTo: clientCity);
     }
 
     if(filterProvince) {
-      heroes.where('hero_province', isEqualTo: clientProvince);
+      print('filterProvince : '+clientProvince);
+      heroes = heroes.where('hero_province', isEqualTo: clientProvince);
     }
 
     return heroes.snapshots()

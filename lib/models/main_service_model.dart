@@ -36,6 +36,7 @@ class ServiceOptionModel {
 
   final String name;
   final String description;
+  final String inclusions;
   final bool enable;
   final int icon;
 
@@ -56,6 +57,7 @@ class ServiceOptionModel {
 
     this.name,
     this.description,
+    this.inclusions,
     this.enable,
     this.icon,
 
@@ -125,6 +127,7 @@ class HeroServiceModel {
   final String status;
 
   final String heroName;
+  final String heroNumber;
   final String heroAddress;
   final String heroCity;
   final String heroProvince;
@@ -144,6 +147,7 @@ class HeroServiceModel {
     this.status,
 
     this.heroName,
+    this.heroNumber,
     this.heroAddress,
     this.heroCity,
     this.heroProvince,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:heroservices/models/main_service_model.dart';
 import 'package:heroservices/services/main_service.dart';
 import 'package:heroservices/ui/widgets/main_service/smart_buttons/service_option_smart_button.dart';
+import 'package:heroservices/ui/widgets/shared/divider_shared_widget.dart';
 import 'package:heroservices/ui/widgets/shared/three_bounce_spinkit_shared_widget.dart';
 
 class FeaturedWidget extends StatelessWidget {
@@ -42,8 +44,10 @@ class FeaturedWidget extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(left: 80, top: 10, bottom: 5, right: 20),
-                                child: Wrap(
+                                padding: const EdgeInsets.only(left: 78, top: 5, bottom: 10, right: 20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Service Type • '+serviceOption.serviceType.toUpperCase()+' BASIS'),
 
@@ -59,7 +63,38 @@ class FeaturedWidget extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Center(child: ServiceOptionSmartButton(serviceOption: serviceOption,)),
+                              Container(
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    OutlineButton(
+                                      onPressed: () {
+                                        Get.bottomSheet(BottomSheet(
+                                            onClosing: () {},
+                                            builder: (context) {
+                                              return SingleChildScrollView(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(15.0),
+                                                  child: Column(
+                                                    children: [
+                                                      Text(serviceOption.name, style: TextStyle(fontSize: 18),),
+                                                      DividerSharedWidget(),
+                                                      Text(serviceOption.inclusions, style: TextStyle(fontSize: 16),),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }));
+                                      },
+                                      child: Text('INCLUSIONS'),
+                                    ),
+                                    SizedBox(width: 10,),
+                                    ServiceOptionSmartButton(serviceOption: serviceOption,),
+                                  ],
+                                ),
+                              ),
                               SizedBox(height: 10,),
                             ],
                           ),

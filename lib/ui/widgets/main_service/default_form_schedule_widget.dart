@@ -5,6 +5,7 @@ import 'package:heroservices/controllers/form_controller.dart';
 import 'package:heroservices/controllers/main_service_controller.dart';
 import 'package:heroservices/controllers/navigation_controller.dart';
 import 'package:heroservices/models/main_service_model.dart';
+import 'package:heroservices/ui/views/service_option_view.dart';
 import 'package:heroservices/ui/widgets/main_service/service_heroes_widget.dart';
 import 'package:intl/intl.dart';
 
@@ -79,7 +80,7 @@ class DefaultFormScheduleWidget extends StatelessWidget {
                           if(num.tryParse(input) != null) {
                             if(serviceOption.serviceType=='timeline'
                                 && formCtrl.defaultFormValues['Timeline Type'] == 'Hours'
-                                && int.parse(input) > int.parse(serviceOption.hoursToDay)
+                                && int.parse(input) >= int.parse(serviceOption.hoursToDay)
                             ) {
                               Get.find<NavigationController>()
                                   .alert(serviceOption.hoursToDay+' hours limit for this Service.',
@@ -125,7 +126,7 @@ class DefaultFormScheduleWidget extends StatelessWidget {
                         onTap: () {
                           print(Get.find<FormController>().formHeroes.length);
                           if(ctrl.defaultFormValues['Schedule']!='' && ctrl.defaultFormValues['Timeline']!='') {
-                            showDialog(
+                            /*showDialog(
                                 barrierDismissible: false,
                                 context: context,
                                 builder: (BuildContext context) {
@@ -136,7 +137,43 @@ class DefaultFormScheduleWidget extends StatelessWidget {
                                     ),
                                   );
                                 }
+                            );*/
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) => Container(
+                                height: MediaQuery.of(context).size.height * 0.75,
+                                decoration: new BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: new BorderRadius.only(
+                                    topLeft: const Radius.circular(25.0),
+                                    topRight: const Radius.circular(25.0),
+                                  ),
+                                ),
+                                child: ServiceHeroesWidget(),
+                              ),
                             );
+                            /*Get.bottomSheet(
+                              BottomSheet(
+                                enableDrag: true,
+                                onClosing: () {},
+                                builder: (context) {
+                                  return Container(
+                                      height: MediaQuery.of(context).size.height * 0.75,
+                                      decoration: new BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: new BorderRadius.only(
+                                          topLeft: const Radius.circular(25.0),
+                                          topRight: const Radius.circular(25.0),
+                                        ),
+                                      ),
+                                      child: ServiceHeroesWidget()
+                                  );
+                                }
+                              )
+                            );*/
+                            //Get.to(ServiceHeroesWidget());
                           } else {
                             Get.find<NavigationController>().alert('Required fields', 'Set schedule and timeline first.');
                           }

@@ -29,6 +29,7 @@ class BookingService {
         heroId: doc.data['hero_id'] ?? '',
         heroName: doc.data['hero_name'] ?? '',
         heroAddress: doc.data['hero_address'] ?? '',
+        heroNumber: doc.data['hero_number'] ?? '',
         heroRate: doc.data['hero_rate'] ?? '',
 
         customerId: doc.data['customer_id'] ?? '',
@@ -100,6 +101,7 @@ class BookingService {
 
       String heroId,
       String heroName,
+      String heroNumber,
       String heroAddress,
       String heroRate,
 

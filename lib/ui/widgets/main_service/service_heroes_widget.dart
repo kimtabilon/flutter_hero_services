@@ -57,17 +57,23 @@ class ServiceHeroesWidget extends StatelessWidget {
               }
             }
         ),
-        SliverToBoxAdapter(child: SizedBox(height: 30,),),
         SliverToBoxAdapter(
-          child: OutlineButton(
-            onPressed: () {
-              Get.back();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('DONE'),
-            ),
-            color: Color(0xff13869F),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 20,),
+              OutlineButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('DONE'),
+                ),
+                color: Color(0xff13869F),
+              ),
+              SizedBox(height: 30,),
+            ],
           ),
         ),
       ],

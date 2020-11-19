@@ -73,7 +73,7 @@ class ServiceCategoryView extends StatelessWidget {
                     }
                     return SliverToBoxAdapter(
                         child: Container(
-                          height: 170,
+                          height: 220,
                           color: Colors.grey[200],
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: ListView.builder(
@@ -81,7 +81,7 @@ class ServiceCategoryView extends StatelessWidget {
                             itemCount: snapshot.hasData ? snapshot.data.length : 0,
                             itemBuilder: (context, index) {
                               return Container(
-                                height: 170,
+                                height: 220,
                                 width: 200,
                                 child: ServiceCategoryTileWidget(serviceCategory: snapshot.data[index],),
                               );

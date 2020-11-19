@@ -22,7 +22,7 @@ class DefaultFormCustomerWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(height: 20,),
-          Text("Customer Information", style: TextStyle(fontSize: 20),),
+          Text("Billing Information", style: TextStyle(fontSize: 20),),
           Text('Fillup form'),
           SizedBox(height: 20,),
           Flexible(
@@ -32,7 +32,7 @@ class DefaultFormCustomerWidget extends StatelessWidget {
                 children: [
                   TextFormField(
                     textCapitalization: TextCapitalization.words,
-                    decoration: decoration.copyWith(labelText: 'Enter Fullname'),
+                    decoration: decoration.copyWith(labelText: 'Customer Name'),
                     onChanged: (val) {
                       Get.find<FormController>().addDefaultFieldValue('Customer Name', val);
                     },
@@ -48,7 +48,7 @@ class DefaultFormCustomerWidget extends StatelessWidget {
                         textCapitalization: TextCapitalization.words,
                         decoration: decoration.copyWith(labelText: 'Street'),
                         onChanged: (val) {
-                          Get.find<FormController>().addDefaultFieldValue('Customer Street', val);
+                          Get.find<FormController>().addDefaultFieldValue('Customer Street', val.toUpperCase());
                         },
                         keyboardType: TextInputType.text,
                       ),
@@ -57,7 +57,7 @@ class DefaultFormCustomerWidget extends StatelessWidget {
                         textCapitalization: TextCapitalization.words,
                         decoration: decoration.copyWith(labelText: 'Barangay'),
                         onChanged: (val) {
-                          Get.find<FormController>().addDefaultFieldValue('Customer Barangay', val);
+                          Get.find<FormController>().addDefaultFieldValue('Customer Barangay', val.toUpperCase());
                         },
                         keyboardType: TextInputType.text,
                       ),
@@ -66,7 +66,7 @@ class DefaultFormCustomerWidget extends StatelessWidget {
                         textCapitalization: TextCapitalization.words,
                         decoration: decoration.copyWith(labelText: 'City'),
                         onChanged: (val) {
-                          Get.find<FormController>().addDefaultFieldValue('Customer City', val);
+                          Get.find<FormController>().addDefaultFieldValue('Customer City', val.toUpperCase());
                         },
                         keyboardType: TextInputType.text,
                       ),
@@ -75,7 +75,7 @@ class DefaultFormCustomerWidget extends StatelessWidget {
                         textCapitalization: TextCapitalization.words,
                         decoration: decoration.copyWith(labelText: 'Province'),
                         onChanged: (val) {
-                          Get.find<FormController>().addDefaultFieldValue('Customer Province', val);
+                          Get.find<FormController>().addDefaultFieldValue('Customer Province', val.toUpperCase());
                         },
                         keyboardType: TextInputType.text,
                       ),
@@ -85,8 +85,9 @@ class DefaultFormCustomerWidget extends StatelessWidget {
               ),
             ),
           ),
+          //! kIsWeb ? Flexible(child: MapWidget(),):SizedBox.shrink(),
           SizedBox(height: 100,),
-          //kIsWeb ? Flexible(child: MapWidget(),):SizedBox.shrink(),
+
         ],
       ),
     );

@@ -16,6 +16,7 @@ class BookingModel {
   String customerId;
   String customerName;
   String customerAddress;
+  String heroNumber;
   String customerCity;
   String customerProvince;
 
@@ -45,6 +46,7 @@ class BookingModel {
     this.heroId,
     this.heroName,
     this.heroAddress,
+    this.heroNumber,
     this.heroRate,
 
     this.customerId,
@@ -77,6 +79,7 @@ class BookingModel {
         heroId = parsedJSON['hero_id'],
         heroName = parsedJSON['hero_name'],
         heroAddress = parsedJSON['hero_address'],
+        heroNumber = parsedJSON['hero_number'],
 
         customerId = parsedJSON['customer_id'],
         customerName = parsedJSON['customer_name'],
@@ -95,6 +98,7 @@ class QuoteModel {
 
   final String heroId;
   final String heroName;
+  final String heroNumber;
   final String heroAddress;
 
   final String rate;
@@ -106,6 +110,7 @@ class QuoteModel {
 
     this.heroId,
     this.heroName,
+    this.heroNumber,
     this.heroAddress,
 
     this.rate,

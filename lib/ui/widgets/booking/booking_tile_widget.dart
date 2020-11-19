@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:heroservices/controllers/navigation_controller.dart';
 import 'package:heroservices/models/booking_model.dart';
 import 'package:heroservices/services/booking_service.dart';
-import 'package:heroservices/ui/views/chat_view.dart';
+import 'package:heroservices/ui/features/chat_feature.dart';
+import 'package:heroservices/ui/features/locate_feature.dart';
 import 'package:heroservices/ui/widgets/booking/view_booking_widget.dart';
 import 'package:heroservices/ui/widgets/shared/rating_widget.dart';
 import 'package:heroservices/ui/widgets/shared/three_bounce_spinkit_shared_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:popup_menu/popup_menu.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BookingTileWidget extends StatelessWidget {
   final BookingModel booking;
@@ -15,6 +20,7 @@ class BookingTileWidget extends StatelessWidget {
   BookingTileWidget({this.booking});
   @override
   Widget build(BuildContext context) {
+    PopupMenu.context = context;
     switch(booking.queue) {
       case 'for_quotation':
         return ExpansionTile(
@@ -187,19 +193,98 @@ class BookingTileWidget extends StatelessWidget {
         );
         break;
       case 'active':
+        GlobalKey btnKey = GlobalKey();
+        PopupMenu menu = PopupMenu(
+          // backgroundColor: Colors.teal,
+          // lineColor: Colors.tealAccent,
+          // maxColumn: 2,
+            items: [
+              MenuItem(
+                  title: 'Chat',
+                  // textStyle: TextStyle(fontSize: 10.0, color: Colors.tealAccent),
+                  image: Icon(
+                    Icons.chat,
+                    color: Colors.white,
+                  )),
+              MenuItem(
+                  title: 'Call',
+                  image: Icon(
+                    Icons.call,
+                    color: Colors.white,
+                  )),
+              MenuItem(
+                  title: 'Locate',
+                  image: Icon(
+                    Icons.edit_location,
+                    color: Colors.white,
+                  )),
+              MenuItem(
+                  title: 'Report',
+                  image: Icon(
+                    Icons.help,
+                    color: Colors.white,
+                  )),
+
+            ],
+            onClickMenu: (MenuItemProvider item) async {
+              switch(item.menuTitle) {
+                case 'Chat':
+                  Get.to(ChatFeature(booking: _booking, isAdmin: false,));
+                  break;
+                case 'Report':
+                  Get.to(ChatFeature(booking: _booking, isAdmin: true,));
+                  break;
+                case 'Locate':
+
+                  Geolocator _geolocator = Geolocator();
+                  List<Placemark> startPlacemark = await _geolocator.placemarkFromAddress(_booking.customerAddress);
+                  List<Placemark> destinationPlacemark = await _geolocator.placemarkFromAddress(_booking.heroAddress);
+
+                  Get.bottomSheet(
+                      BottomSheet(
+                          enableDrag: true,
+                          onClosing: () {},
+                          builder: (context) {
+                            return Container(
+                                height: MediaQuery.of(context).size.height * 0.75,
+                                decoration: new BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: new BorderRadius.only(
+                                    topLeft: const Radius.circular(25.0),
+                                    topRight: const Radius.circular(25.0),
+                                  ),
+                                ),
+                                child: LocateFeature(booking: _booking, startPlacemark: startPlacemark, destinationPlacemark: destinationPlacemark,)
+                            );
+                          }
+                      )
+                  );
+                  break;
+                case 'Call':
+                  launch(('tel://${_booking.heroNumber}'));
+                  break;
+              }
+              print('Click menu -> ${item.menuTitle}');
+            },
+            stateChanged: (bool isShow) {},
+            onDismiss: (){});
         return ClipOval(
           child: Material(
-            color: Colors.grey[400], // button color
+            color: Colors.grey[800], // button color
             child: InkWell(
               splashColor: Color(0xff93CA68), // inkwell color
-              child: SizedBox(width: 30, height: 30, child: Icon(Icons.chat, color: Colors.white, size: 20,)),
+              child: SizedBox(width: 30, height: 30, child: Icon(Icons.more_horiz, color: Colors.white, size: 20,)),
               onLongPress: () {
                 //BookingService().changeQueue(bookingId, 'cancelled');
               },
               onTap: () {
+                menu.show(widgetKey: btnKey);
+              },
+              key: btnKey,
+              /*onTap: () {
                 Get.to(ChatView(booking: _booking,));
                 //Get.find<NavigationController>().alert('Message', 'Chat feature is not yet available.');
-              },
+              },*/
             ),
           ),
         );
@@ -222,6 +307,7 @@ class BookingTileWidget extends StatelessWidget {
 
                       quote.heroId,
                       quote.heroName,
+                      quote.heroNumber,
                       quote.heroAddress,
                       quote.rate,
 
@@ -328,7 +414,7 @@ class BookingTileWidget extends StatelessWidget {
             children: [
               OutlineButton(
                 onPressed: (){
-                  Get.to(ChatView(booking: _bookingsInGroup[0],));
+                  Get.to(ChatFeature(booking: _bookingsInGroup[0], isAdmin: false,));
                   //Get.find<NavigationController>().alert('Message', 'Chat feature is not yet available.');
                 },
                 child: Padding(

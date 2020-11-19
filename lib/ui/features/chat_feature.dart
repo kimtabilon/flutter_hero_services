@@ -6,10 +6,11 @@ import 'package:heroservices/services/chat_service.dart';
 import 'package:heroservices/ui/widgets/shared/three_bounce_spinkit_shared_widget.dart';
 
 // ignore: must_be_immutable
-class ChatView extends StatelessWidget {
+class ChatFeature extends StatelessWidget {
   BookingModel booking;
+  bool isAdmin;
 
-  ChatView({this.booking});
+  ChatFeature({this.booking, this.isAdmin});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class ChatView extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                  text: booking.heroName,
+                  text: isAdmin?'Support Team':booking.heroName,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -61,7 +62,7 @@ class ChatView extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: StreamBuilder(
-                stream: ChatService(booking: booking).chats,
+                stream: ChatService(booking: booking, isAdmin: isAdmin).chats,
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return Padding(
@@ -174,8 +175,8 @@ class ChatView extends StatelessWidget {
             color: Colors.blue,
             onPressed: () {
               ChatService().sendChat(
-                  booking.heroId,
-                  booking.heroName,
+                  isAdmin?'admin':booking.heroId,
+                  isAdmin?'Support Team':booking.heroName,
                   booking.customerId,
                   booking.customerName,
                   booking.serviceOptionId,

@@ -4,8 +4,9 @@ import 'package:heroservices/models/chat_model.dart';
 
 class ChatService {
   final BookingModel booking;
+  final bool isAdmin;
 
-  ChatService({this.booking});
+  ChatService({this.booking, this.isAdmin});
 
   final CollectionReference chatCollection = Firestore.instance.collection('chat');
 
@@ -35,7 +36,7 @@ class ChatService {
   Stream<List<ChatModel>> get chats {
     return chatCollection
         .where('customer_id',isEqualTo: booking.customerId)
-        .where('hero_id',isEqualTo: booking.heroId)
+        .where('hero_id',isEqualTo: isAdmin?'admin':booking.heroId)
         .where('service_option_id',isEqualTo: booking.serviceOptionId)
         .orderBy('timestamp', descending: true)
         .snapshots()

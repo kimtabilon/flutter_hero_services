@@ -171,6 +171,7 @@ class CheckoutSummary extends StatelessWidget {
 
                 '', //heroId
                 '', //heroName
+                '', //heroNumber
                 '', //heroAddress
                 '', //heroRate
 
@@ -210,6 +211,7 @@ class CheckoutSummary extends StatelessWidget {
 
                   hero.heroId, //heroId
                   hero.heroName, //heroFullname
+                  hero.heroNumber, //heroCompleteAddress
                   hero.heroAddress, //heroCompleteAddress
                   rate.toString(), //heroRate
 

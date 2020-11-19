@@ -22,6 +22,8 @@ class FormController extends GetxController {
 
   addDefaultFieldValue(String key, String value) {
     defaultFormValues.update(key, (v) => value, ifAbsent: () => value);
+    print('###########################');
+    print(defaultFormValues);
     update();
   }
 
