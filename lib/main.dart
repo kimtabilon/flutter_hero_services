@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         initialBinding: AuthBinding(),
         title: 'Hero Services',
-        theme: ThemeData(
+        theme: new ThemeData(
           cardTheme: CardTheme(
             margin: EdgeInsets.all(5.0),
           ),
