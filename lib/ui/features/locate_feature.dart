@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:heroservices/controllers/navigation_controller.dart';
 import 'package:heroservices/models/booking_model.dart';
+import 'package:heroservices/services/booking_service.dart';
 
 class LocateFeature extends StatefulWidget {
   final BookingModel booking;
   final List<Placemark> startPlacemark;
   final List<Placemark> destinationPlacemark;
+  final Map<PolylineId, Polyline> polylines;
+  final BitmapDescriptor pinLocationIcon;
 
-  LocateFeature({this.booking, this.startPlacemark, this.destinationPlacemark});
+  LocateFeature({this.booking, this.startPlacemark, this.destinationPlacemark, this.polylines, this.pinLocationIcon});
 
   @override
   _LocateFeatureState createState() => _LocateFeatureState();
@@ -30,7 +36,7 @@ class _LocateFeatureState extends State<LocateFeature> {
         startCoordinates.longitude,
       ),
       infoWindow: InfoWindow(
-        title: 'Start',
+        title: widget.booking.customerName,
         snippet: widget.booking.customerAddress,
       ),
       icon: BitmapDescriptor.defaultMarker,
@@ -44,10 +50,10 @@ class _LocateFeatureState extends State<LocateFeature> {
         destinationCoordinates.longitude,
       ),
       infoWindow: InfoWindow(
-        title: 'Destination',
+        title: widget.booking.heroName,
         snippet: widget.booking.heroAddress,
       ),
-      icon: BitmapDescriptor.defaultMarker,
+      icon: widget.pinLocationIcon,
     );
 
     // Add the markers to the list
@@ -58,8 +64,6 @@ class _LocateFeatureState extends State<LocateFeature> {
     Position _northeastCoordinates;
     Position _southwestCoordinates;
 
-// Calculating to check that
-// southwest coordinate <= northeast coordinate
     if (startCoordinates.latitude <= destinationCoordinates.latitude) {
       _southwestCoordinates = startCoordinates;
       _northeastCoordinates = destinationCoordinates;
@@ -68,50 +72,68 @@ class _LocateFeatureState extends State<LocateFeature> {
       _northeastCoordinates = startCoordinates;
     }
 
-// Accommodate the two locations within the
-// camera view of the map
-    /*mapController.animateCamera(
-      CameraUpdate.newLatLngBounds(
-        LatLngBounds(
-          northeast: LatLng(
-            _northeastCoordinates.latitude,
-            _northeastCoordinates.longitude,
-          ),
-          southwest: LatLng(
-            _southwestCoordinates.latitude,
-            _southwestCoordinates.longitude,
-          ),
-        ),
-        100.0, // padding
-      ),
-    );*/
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        StreamBuilder(
+          stream: BookingService(bookingId: widget.booking.bookingId).locate,
+          builder: (context, snapshot) {
+            return SizedBox.shrink();
+          },
+        ),
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 18, 0, 18),
           child: Text(widget.booking.serviceOption.toUpperCase(), style: TextStyle(fontSize: 15),),
         ),
         SizedBox(
           height: 330,
-          child: GoogleMap(
-            onMapCreated: (GoogleMapController googleMapController) {
-              setState(()=> mapController = googleMapController);
+          child: GetBuilder<NavigationController>(
+            builder: (navCtrl) {
+              navCtrl.locate.forEach((key, value) {
+                LocateModel _locate = value;
+                print(value.lng);
+                print('===========================');
+                Marker _new = Marker(
+                  markerId: MarkerId('$destinationCoordinates'),
+                  position: LatLng(
+                    double.parse(_locate.lat),
+                    double.parse(_locate.lng)
+                  ),
+                  infoWindow: InfoWindow(
+                    title: widget.booking.heroName,
+                    snippet: widget.booking.heroAddress,
+                  ),
+                  icon: widget.pinLocationIcon,
+                );
+                markers = {};
+                markers.add(_new);
+              });
+              markers.add(startMarker);
+              return GoogleMap(
+                onMapCreated: (GoogleMapController googleMapController) {
+                  setState(()=> mapController = googleMapController);
+                },
+                initialCameraPosition: CameraPosition(
+                    zoom: 16,
+                    target: LatLng(
+                      _northeastCoordinates.latitude,
+                      _northeastCoordinates.longitude,
+                    )
+                ),
+                mapType: MapType.normal,
+                zoomGesturesEnabled: true,
+                zoomControlsEnabled: true,
+                myLocationEnabled: true,
+                myLocationButtonEnabled: false,
+                //markers: Set<Marker>.of(_markers),
+                markers: markers != null ? Set<Marker>.from(markers) : null,
+                polylines: Set<Polyline>.of(widget.polylines.values),
+              );
             },
-            initialCameraPosition: CameraPosition(
-                zoom: 14,
-                target: LatLng(
-                  _northeastCoordinates.latitude,
-                  _northeastCoordinates.longitude,
-                )
-            ),
-            mapType: MapType.normal,
-            //markers: Set<Marker>.of(_markers),
-            markers: markers != null ? Set<Marker>.from(markers) : null,
           ),
         ),
       ],
     );
   }
+
 }

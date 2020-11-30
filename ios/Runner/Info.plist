@@ -3,14 +3,17 @@
 <plist version="1.0">
 <dict>
 <!-- for iOS 11 + -->
- <key>NSLocationWhenInUseUsageDescription</key>
- <string>Reason why app needs location</string>
- <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
- <string>Reason why app needs location</string>
+     <key>NSLocationWhenInUseUsageDescription</key>
+     <string>This app needs access to location when open.</string>
+     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+     <string>This app needs access to location when open.</string>
 
- <!-- additionally for iOS 9/10, if you need always permission -->
- <key>NSLocationAlwaysUsageDescription</key>
- <string>Reason why app needs location</string>
+     <!-- additionally for iOS 9/10, if you need always permission -->
+     <key>NSLocationAlwaysUsageDescription</key>
+     <string>This app needs access to location when open.</string>
+
+     <key>io.flutter.embedded_views_preview</key>
+     <string>YES</string>
  
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

@@ -1,6 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:heroservices/controllers/navigation_controller.dart';
 import 'package:heroservices/models/booking_model.dart';
 import 'package:heroservices/services/booking_service.dart';
@@ -10,13 +15,17 @@ import 'package:heroservices/ui/widgets/booking/view_booking_widget.dart';
 import 'package:heroservices/ui/widgets/shared/rating_widget.dart';
 import 'package:heroservices/ui/widgets/shared/three_bounce_spinkit_shared_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:load/load.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class BookingTileWidget extends StatelessWidget {
   final BookingModel booking;
 
   BookingTileWidget({this.booking});
+
   @override
   Widget build(BuildContext context) {
     PopupMenu.context = context;
@@ -192,81 +201,7 @@ class BookingTileWidget extends StatelessWidget {
         );
         break;
       case 'active':
-        GlobalKey btnKey = GlobalKey();
-        PopupMenu menu = PopupMenu(
-          // backgroundColor: Colors.teal,
-          // lineColor: Colors.tealAccent,
-          // maxColumn: 2,
-            items: [
-              MenuItem(
-                  title: 'Chat',
-                  // textStyle: TextStyle(fontSize: 10.0, color: Colors.tealAccent),
-                  image: Icon(
-                    Icons.chat,
-                    color: Colors.white,
-                  )),
-              MenuItem(
-                  title: 'Call',
-                  image: Icon(
-                    Icons.call,
-                    color: Colors.white,
-                  )),
-              MenuItem(
-                  title: 'Locate',
-                  image: Icon(
-                    Icons.edit_location,
-                    color: Colors.white,
-                  )),
-              MenuItem(
-                  title: 'Report',
-                  image: Icon(
-                    Icons.help,
-                    color: Colors.white,
-                  )),
-
-            ],
-            onClickMenu: (MenuItemProvider item) async {
-              switch(item.menuTitle) {
-                case 'Chat':
-                  Get.to(ChatFeature(booking: _booking, isAdmin: false,));
-                  break;
-                case 'Report':
-                  Get.to(ChatFeature(booking: _booking, isAdmin: true,));
-                  break;
-                case 'Locate':
-
-                  Geolocator _geolocator = Geolocator();
-                  List<Placemark> startPlacemark = await _geolocator.placemarkFromAddress(_booking.customerAddress);
-                  List<Placemark> destinationPlacemark = await _geolocator.placemarkFromAddress(_booking.heroAddress);
-
-                  Get.bottomSheet(
-                      BottomSheet(
-                          enableDrag: true,
-                          onClosing: () {},
-                          builder: (context) {
-                            return Container(
-                                height: MediaQuery.of(context).size.height * 0.75,
-                                decoration: new BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: new BorderRadius.only(
-                                    topLeft: const Radius.circular(25.0),
-                                    topRight: const Radius.circular(25.0),
-                                  ),
-                                ),
-                                child: LocateFeature(booking: _booking, startPlacemark: startPlacemark, destinationPlacemark: destinationPlacemark,)
-                            );
-                          }
-                      )
-                  );
-                  break;
-                case 'Call':
-                  launch(('tel://${_booking.heroNumber}'));
-                  break;
-              }
-              print('Click menu -> ${item.menuTitle}');
-            },
-            stateChanged: (bool isShow) {},
-            onDismiss: (){});
+        GlobalKey _key = GlobalKey();
         return ClipOval(
           child: Material(
             color: Colors.grey[800], // button color
@@ -277,9 +212,9 @@ class BookingTileWidget extends StatelessWidget {
                 //BookingService().changeQueue(bookingId, 'cancelled');
               },
               onTap: () {
-                menu.show(widgetKey: btnKey);
+                popupMenu(_key, _booking);
               },
-              key: btnKey,
+              key: _key,
               /*onTap: () {
                 Get.to(ChatView(booking: _booking,));
                 //Get.find<NavigationController>().alert('Message', 'Chat feature is not yet available.');
@@ -407,18 +342,22 @@ class BookingTileWidget extends StatelessWidget {
 
       case 'active':
         if(_bookingsInGroup.length==1) {
+          GlobalKey _key = GlobalKey();
+          BookingModel _booking = _bookingsInGroup[0];
+
           return Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              OutlineButton(
+              MaterialButton(
+                color: Colors.black54,
+                key: _key,
                 onPressed: (){
-                  Get.to(ChatFeature(booking: _bookingsInGroup[0], isAdmin: false,));
-                  //Get.find<NavigationController>().alert('Message', 'Chat feature is not yet available.');
+                  popupMenu(_key, _booking);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('OPEN CHAT',style: TextStyle(color: Colors.grey[800]),),
+                  child: Text('MORE OPTIONS',style: TextStyle(color: Colors.white),),
                 ),
               ),
               viewDetailsButton(context),
@@ -463,5 +402,154 @@ class BookingTileWidget extends StatelessWidget {
         child: Text('VIEW DETAILS',style: TextStyle(color: Colors.white),),
       ),
     );
+  }
+
+  popupMenu(_key, _booking) {
+    PopupMenu menu = PopupMenu(
+      // backgroundColor: Colors.teal,
+      // lineColor: Colors.tealAccent,
+      // maxColumn: 2,
+        items: [
+          MenuItem(
+              title: 'Chat',
+              // textStyle: TextStyle(fontSize: 10.0, color: Colors.tealAccent),
+              image: Icon(
+                Icons.chat,
+                color: Colors.white,
+              )),
+          /*MenuItem(
+              title: 'Call',
+              image: Icon(
+                Icons.call,
+                color: Colors.white,
+              )),*/
+          MenuItem(
+              title: 'Locate',
+              image: Icon(
+                Icons.edit_location,
+                color: Colors.white,
+              )),
+          MenuItem(
+              title: 'Help',
+              image: Icon(
+                Icons.help,
+                color: Colors.white,
+              )),
+
+        ],
+        onClickMenu: (MenuItemProvider item) async {
+          switch(item.menuTitle) {
+            case 'Chat':
+              Get.to(ChatFeature(booking: _booking, isAdmin: false,));
+              break;
+            case 'Help':
+              Get.to(ChatFeature(booking: _booking, isAdmin: true,));
+              break;
+            case 'Locate':
+              if(!kIsWeb) {
+                showLoadingDialog();
+                Geolocator _geolocator = Geolocator();
+                List<Placemark> startPlacemark = await _geolocator
+                    .placemarkFromAddress(_booking.customerAddress);
+                List<Placemark> destinationPlacemark = await _geolocator
+                    .placemarkFromAddress(_booking.heroAddress);
+
+                /*START PolylinePoints*/
+                PolylinePoints polylinePoints;
+                List<LatLng> polylineCoordinates = [];
+                Map<PolylineId, Polyline> polylines = {};
+                Position startCoordinates = startPlacemark[0].position;
+                Position destinationCoordinates = destinationPlacemark[0]
+                    .position;
+
+                polylinePoints = PolylinePoints();
+
+                PolylineResult result = await polylinePoints
+                    .getRouteBetweenCoordinates(
+                  'AIzaSyCa74d9dW86yh-52LzCy9S0awYbgXuZ79w',
+                  // Google Maps API Key
+                  PointLatLng(
+                      startCoordinates.latitude, startCoordinates.longitude),
+                  PointLatLng(destinationCoordinates.latitude,
+                      destinationCoordinates.longitude),
+                  travelMode: TravelMode.transit,
+                );
+
+                if (result.points.isNotEmpty) {
+                  result.points.forEach((PointLatLng point) {
+                    polylineCoordinates.add(
+                        LatLng(point.latitude, point.longitude));
+                  });
+                }
+
+                PolylineId id = PolylineId('poly');
+
+                Polyline polyline = Polyline(
+                  polylineId: id,
+                  color: Colors.red,
+                  points: polylineCoordinates,
+                  width: 3,
+                );
+
+                polylines[id] = polyline;
+                /*END PolylinePoints*/
+
+                Future<Uint8List> getBytesFromAsset(String path,
+                    int width) async {
+                  ByteData data = await rootBundle.load(path);
+                  ui.Codec codec = await ui.instantiateImageCodec(
+                      data.buffer.asUint8List(), targetWidth: width);
+                  ui.FrameInfo fi = await codec.getNextFrame();
+                  return (await fi.image.toByteData(
+                      format: ui.ImageByteFormat.png)).buffer.asUint8List();
+                }
+
+                Uint8List markerIcon = await getBytesFromAsset(
+                    'assets/hero-marker.png', 80);
+
+                Get.bottomSheet(
+                    BottomSheet(
+                        enableDrag: true,
+                        onClosing: () {},
+                        builder: (context) {
+                          return Container(
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height * 0.75,
+                              decoration: new BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: new BorderRadius.only(
+                                  topLeft: const Radius.circular(25.0),
+                                  topRight: const Radius.circular(25.0),
+                                ),
+                              ),
+                              child: LocateFeature(
+                                booking: _booking,
+                                startPlacemark: startPlacemark,
+                                destinationPlacemark: destinationPlacemark,
+                                polylines: polylines,
+                                pinLocationIcon: BitmapDescriptor.fromBytes(
+                                    markerIcon),
+                              )
+                          );
+                        }
+                    )
+                );
+                hideLoadingDialog();
+              } else {
+                Get.find<NavigationController>().alert('Not Supported.', 'You are using browser platform.');
+              }
+              break;
+            case 'Call':
+              launch(('tel://${_booking.heroNumber}'));
+              break;
+          }
+          print('Click menu -> ${item.menuTitle}');
+        },
+        stateChanged: (bool isShow) {},
+        onDismiss: (){});
+
+    menu.show(widgetKey: _key);
   }
 }

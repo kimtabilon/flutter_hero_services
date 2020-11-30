@@ -58,4 +58,9 @@ class AuthController extends GetxController {
       Get.find<NavigationController>().alert('Error signing out', e.message);
     }
   }
+
+  Future<void> resetPassword(String email) async {
+    await _auth.sendPasswordResetEmail(email: email);
+    Get.find<NavigationController>().alert('Request Sent!', 'Check your email inbox for instruction.');
+  }
 }

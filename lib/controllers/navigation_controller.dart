@@ -49,8 +49,17 @@ class NavigationController extends GetxController {
   }
 
   resetBookingGroups() {
-    print('resetBookingGroups');
     bookingGroups = {};
+    update();
+  }
+
+  Map locate = {};
+  addLocate(LocateModel model) {
+    locate[model.date] = model;
+    update();
+  }
+  resetLocate() {
+    locate = {};
     update();
   }
 }

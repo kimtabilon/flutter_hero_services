@@ -159,7 +159,7 @@ class BookingService {
     return snapshot.documents.map((doc) {
       return QuoteModel(
         quoteId: doc.documentID,
-        bookingId: doc.data['hero_id'] ?? '',
+        bookingId: doc.data['booking_id'] ?? '',
 
         heroId: doc.data['hero_id'] ?? '',
         heroName: doc.data['hero_name'] ?? '',
@@ -201,5 +201,32 @@ class BookingService {
           'total':total,
           'queue':'for_confirmation',
         });
+  }
+
+  final CollectionReference locateCollection = Firestore.instance.collection('locate');
+
+  List<LocateModel> _locateListFromSnapshot(QuerySnapshot snapshot) {
+    Get.find<NavigationController>().resetLocate();
+    return snapshot.documents.map((doc) {
+      //print(doc.data.toString());
+      LocateModel locate = LocateModel(
+        bookingId: doc.data['booking_id'] ?? '',
+
+        lat: doc.data['lat'] ?? '',
+        lng: doc.data['lng'] ?? '',
+
+        date: doc.data['date'] ?? '',
+      );
+
+      Get.find<NavigationController>().addLocate(locate);
+      return locate;
+    }).toList();
+  }
+
+  Stream<List<LocateModel>> get locate {
+    return locateCollection
+        .where('booking_id',isEqualTo: bookingId)
+        .snapshots()
+        .map(_locateListFromSnapshot);
   }
 }

@@ -36,6 +36,7 @@ class AccountSignupWidget extends GetWidget<AuthController> {
           TextFormField(
             decoration: InputDecoration(labelText: 'Mobile Number'),
             controller: mobileCtrl,
+            keyboardType: TextInputType.number
           ),
           SizedBox(height: 50,),
           TextFormField(

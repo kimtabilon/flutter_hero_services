@@ -117,3 +117,22 @@ class QuoteModel {
     this.notes,
   });
 }
+
+
+class LocateModel {
+  final String bookingId;
+
+  final String lat;
+  final String lng;
+
+  final String date;
+
+  LocateModel({
+    this.bookingId,
+
+    this.lat,
+    this.lng,
+
+    this.date,
+  });
+}

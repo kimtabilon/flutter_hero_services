@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroservices/controllers/auth_controller.dart';
+import 'package:heroservices/ui/widgets/account/account_reset_password_widget.dart';
 import 'package:heroservices/ui/widgets/account/account_signup_widget.dart';
 import 'package:heroservices/ui/widgets/shared/bottom_navigation_shared_widget.dart';
 import 'package:load/load.dart';
@@ -51,7 +52,15 @@ class AccountLoginWidget extends GetWidget<AuthController> {
                 controller: passwordCtrl,
                 obscureText: true,
               ),
-              SizedBox(height: 40,),
+              FlatButton(
+                onPressed: () {
+                  Get.to(AccountResetPasswordWidget());
+                },
+                child: Text(
+                  "Reset Password",
+                ),
+              ),
+              SizedBox(height: 20,),
               MaterialButton(
                 onPressed: () {
                   showLoadingDialog();
