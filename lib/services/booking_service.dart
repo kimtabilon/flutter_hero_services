@@ -199,7 +199,7 @@ class BookingService {
           'hero_address':heroAddress,
           'hero_rate':heroRate,
           'total':total,
-          'queue':'for_confirmation',
+          'queue':'active',
         });
   }
 

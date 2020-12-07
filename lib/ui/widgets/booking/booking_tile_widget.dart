@@ -256,7 +256,7 @@ class BookingTileWidget extends StatelessWidget {
                       booking.promoAmount,
                       booking.openPrice ? quote.rate : booking.total,
                       booking.tax,
-                      'for_confirmation'
+                      'active'
                   );
                 } else {
                   BookingService().addHero(
