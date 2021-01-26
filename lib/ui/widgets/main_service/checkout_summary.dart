@@ -156,6 +156,7 @@ class CheckoutSummary extends StatelessWidget {
         onPressed: () {
           showLoadingDialog();
           List heroes = Get.find<FormController>().formHeroes;
+          Map heroSettings = Get.find<FormController>().heroSettings;
           var uuid = Uuid();
           String groupId = uuid.v4();
 
@@ -195,9 +196,16 @@ class CheckoutSummary extends StatelessWidget {
               break;
             default:
               Get.find<NavigationController>().alert('Booking successfully created', 'Please wait for heroes response');
+
               heroes.forEach((element) {
                 HeroServiceModel hero = element;
                 int rate = hero.dailyRate;
+                String queue = 'for_confirmation';
+
+                if(heroSettings[hero.heroId]['autoConfirm']) {
+                  queue = 'active';
+                }
+
                 if(defaultFormValues['Timeline Type']=='Hours') {
                   rate = hero.hourlyRate;
                 }
@@ -229,7 +237,7 @@ class CheckoutSummary extends StatelessWidget {
                   (int.parse(defaultFormValues['Timeline']) * rate).toString(), //total
                   '', //tax
 
-                  'for_confirmation', //quotation
+                  queue, //quotation
                 );
               });
 

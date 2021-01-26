@@ -6,7 +6,7 @@ class FormController extends GetxController {
   Map<String, String> defaultFormValues = {};
 
   List formHeroes = [];
-
+  Map<String, Map> heroSettings = {};
 
   Map<String, String> requiredValues = {};
   int totalForm;
@@ -34,10 +34,21 @@ class FormController extends GetxController {
     for(var x=0; x<formHeroes.length; x++) {
       HeroServiceModel h = formHeroes[x];
       names+=h.heroName+', ';
-      total+=(h.hourlyRate*int.parse(defaultFormValues['Timeline']));
+      var rate = 0;
+      if(defaultFormValues['Timeline Type']=='Days') {
+        rate = h.dailyRate;
+      } else {
+        rate = h.hourlyRate;
+      }
+      total+=(rate*int.parse(defaultFormValues['Timeline']));
     }
     addDefaultFieldValue('Hero', names);
     addDefaultFieldValue('Total', total.toString());
+    update();
+  }
+
+  addFormHeroesSettings(setting, heroId) {
+    heroSettings.update(heroId, (v) => setting, ifAbsent: () => setting);
     update();
   }
 

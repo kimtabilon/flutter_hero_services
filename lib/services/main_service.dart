@@ -9,6 +9,8 @@ class MainService {
   final String serviceOptionId;
   final String serviceOptionFormId;
 
+  final String heroId;
+
   final bool filterCity;
   final String clientCity;
   final bool filterProvince;
@@ -19,6 +21,8 @@ class MainService {
     this.serviceOptionId,
     this.serviceId,
     this.serviceOptionFormId,
+
+    this.heroId,
 
     this.filterCity,
     this.clientCity,
@@ -186,6 +190,21 @@ class MainService {
     return heroes.snapshots()
         .map(_serviceOptionHeroesListFromSnapshot);
   }
+
+  /*
+   * HERO SETTINGS
+  */
+  final CollectionReference heroSettingsCollection = Firestore.instance.collection('hero_settings');
+
+  Stream<List<HeroSettingsModel>> get heroSettings {
+    return heroSettingsCollection
+        .where('hero_id',isEqualTo: heroId)
+        .snapshots()
+        .map((snapshot) => snapshot.documents
+        .map((document) => HeroSettingsModel.fromJson(document.data))
+        .toList());
+  }
+
 
   /*
    * SERVICE OPTION FORMS

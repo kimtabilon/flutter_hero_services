@@ -74,14 +74,10 @@ android {
         dev {
             dimension "flavor-type"
             applicationId "com.mjsitechsolutions.heroservices.dev"
-            versionCode 1
-            versionName "1.0"
         }
         prod{
             dimension "flavor-type"
             applicationId "com.mjsitechsolutions.heroservices"
-            versionCode 1
-            versionName "1.0"
         }
     }
 }

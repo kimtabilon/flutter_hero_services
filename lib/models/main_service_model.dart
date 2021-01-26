@@ -158,3 +158,26 @@ class HeroServiceModel {
 
   });
 }
+
+class HeroSettingsModel {
+  final String heroId;
+  final bool autoConfirm;
+  final String blockDates;
+  final Map locations;
+  final bool offline;
+
+  HeroSettingsModel({
+    this.heroId,
+    this.autoConfirm,
+    this.blockDates,
+    this.locations,
+    this.offline
+  });
+
+  HeroSettingsModel.fromJson(Map<String, dynamic> parsedJSON)
+      : heroId = parsedJSON['hero_id'],
+        autoConfirm = parsedJSON['auto_confirm'],
+        blockDates = parsedJSON['block_dates'],
+        locations = parsedJSON['locations'],
+        offline = parsedJSON['offline'];
+}

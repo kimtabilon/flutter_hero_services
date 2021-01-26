@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroservices/controllers/form_controller.dart';
@@ -5,6 +7,7 @@ import 'package:heroservices/controllers/main_service_controller.dart';
 import 'package:heroservices/models/booking_model.dart';
 import 'package:heroservices/models/main_service_model.dart';
 import 'package:heroservices/services/booking_service.dart';
+import 'package:heroservices/services/main_service.dart';
 import 'package:heroservices/ui/widgets/shared/rating_widget.dart';
 import 'package:heroservices/ui/widgets/shared/three_bounce_spinkit_shared_widget.dart';
 import 'package:intl/intl.dart';
@@ -39,15 +42,18 @@ class HeroesSmartTile extends StatelessWidget {
         initiallyExpanded: formCtrl.isHeroExpanded[heroService.heroId],
         onExpansionChanged: (_isOpen) {
           formCtrl.expandHeroTile(heroService.heroId, _isOpen);
+
           if(_isOpen) {
             formCtrl.setHeroLoading(heroService.heroId, true);
+
+            // CHECK BOOKING CONFLICT
             BookingService(
                 serviceOptionId: heroService.serviceOptionId,
                 heroId: heroService.heroId
             ).heroBookings.listen((documents) {
               if(documents.length>0) {
                 List bookingSchedules = List();
-                //print('--------------------');
+
                 //set booking schedules per hero
                 for(var i=0; i<documents.length; i++) {
                   BookingModel booking = documents[i];
@@ -78,10 +84,38 @@ class HeroesSmartTile extends StatelessWidget {
               } else {
                 formCtrl.setHeroLoading(heroService.heroId, false);
                 formCtrl.setHeroAvailable(heroService.heroId, true);
+
               }
             });
+
+            //CHECK HERO SETTINGS
+            MainService(
+                heroId: heroService.heroId
+            ).heroSettings.listen((documents) {
+              if(documents.length>0) {
+                HeroSettingsModel settings = documents[0];
+                Get.find<FormController>().addFormHeroesSettings({'autoConfirm':settings.autoConfirm}, heroService.heroId);
+                //check block dates
+                if(json.decode(settings.blockDates).contains(DateFormat('yyyy-MM-dd').format(DateTime.parse(defaultFormValues['Schedule'])).toString())) {
+                  print('blockDate');
+                  formCtrl.setHeroAvailable(heroService.heroId, false);
+                }
+
+                //check locations
+                if(settings.locations.length>0) {
+                  if(!settings.locations.containsKey(defaultFormValues['Customer City'])) {
+                    print('city not in list for this hero');
+                    formCtrl.setHeroAvailable(heroService.heroId, false);
+                  }
+                }
+
+              }
+            });
+
+
           }
-          formCtrl.setHeroLoading(heroService.heroId, false);
+          //formCtrl.setHeroAvailable(heroService.heroId, isHeroAvailable);
+          //formCtrl.setHeroLoading(heroService.heroId, false);
         },
         children: [
           SizedBox(height: 10,),

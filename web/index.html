@@ -51,6 +51,7 @@
 
   <script>
     // Your web app's Firebase configuration
+    // Prod ENV
     var firebaseConfig = {
       apiKey: "AIzaSyCAG9_sZ8Dun6Pg_0i3Z7nAdAv2H-bU8w4",
       authDomain: "hero-app-96074.firebaseapp.com",
@@ -60,6 +61,17 @@
       messagingSenderId: "222694061165",
       appId: "1:222694061165:web:1cedeeaa954e0e7b387b64",
       measurementId: "G-54NFT4XRPH"
+    };
+
+    // Dev ENV
+    var xfirebaseConfig = {
+      apiKey: "AIzaSyA-8k3IfIILBaprtt0KoYwLjbd8V2D45C8",
+      authDomain: "hero-app-dev.firebaseapp.com",
+      projectId: "hero-app-dev",
+      storageBucket: "hero-app-dev.appspot.com",
+      messagingSenderId: "273248187449",
+      appId: "1:273248187449:web:166ce23807398e1db0c9e8",
+      measurementId: "G-1957WXNNJP"
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
