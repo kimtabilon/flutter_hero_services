@@ -11,6 +11,7 @@ class AuthController extends GetxController {
 
   FirebaseUser get user => _firebaseUser.value;
 
+
   @override
   // ignore: must_call_super
   onInit() {
